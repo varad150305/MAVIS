@@ -1,0 +1,50 @@
+/* MAVIS — one colour scheme for the whole product.
+   Loaded on every MAVIS page: launcher, gesture control, live translation, offline page, and (from outside, without
+   editing their files) Drishti and the OCR + LLM app. Each of them defines its colours as CSS variables; this file
+   sets those variables to the MAVIS palette. `html:root` is more specific than their own `:root`, so it wins in light
+   and dark mode alike. */
+html:root {
+  /* the MAVIS palette */
+  --m-bg: #0D1117;  --m-surface: #151B26;  --m-surface-2: #1C2433;  --m-surface-3: #243045;
+  --m-line: #2A3546; --m-line-2: #36445A;
+  --m-text: #E8EDF5; --m-muted: #9AA5B8; --m-faint: #6E7A8F;
+  --m-brand: #7C6CFF; --m-brand-2: #A79BFF; --m-brand-soft: #221F45; --m-brand-line: #3F3A7A; --m-on-brand: #FFFFFF;
+  --m-ok: #34D399; --m-warn: #FBBF24; --m-bad: #F87171; --m-info: #38BDF8;
+  color-scheme: dark;
+
+  /* launcher, offline page (hub.css) */
+  --paper: var(--m-bg); --card: var(--m-surface); --ink: var(--m-text); --muted: var(--m-muted);
+  --line: var(--m-line); --line-2: var(--m-line-2);
+  --drishti: var(--m-brand); --mavis: var(--m-brand); --gesture: var(--m-brand); --translation: var(--m-brand);
+  --drishti-soft: var(--m-brand-soft); --mavis-soft: var(--m-brand-soft); --gesture-soft: var(--m-brand-soft);
+  --translation-soft: var(--m-brand-soft);
+  --ok: var(--m-ok); --warn: var(--m-warn); --bad: var(--m-bad);
+
+  /* gesture recogniser, gesture control (gesture.html, control.html) */
+  --bg: var(--m-bg); --panel: var(--m-surface); --panel-2: var(--m-surface-2);
+  --accent: var(--m-brand); --hold: var(--m-warn); --info: var(--m-info); --ready: var(--m-warn);
+  --ocr: var(--m-brand); --tr: var(--m-brand); --dr: var(--m-brand);
+
+  /* Drishti (its own variable names) */
+  --s1: var(--m-surface); --s2: var(--m-surface-2); --s3: var(--m-surface-3); --border: var(--m-line);
+  --accent2: var(--m-brand-2); --alight: var(--m-brand-2); --adark: var(--m-brand-soft);
+  --text: var(--m-text); --green: var(--m-ok); --red: var(--m-bad); --amber: var(--m-warn); --cyan: var(--m-info);
+  --coral: var(--m-bad); --coral-dark: #EF4444;
+  --grad: linear-gradient(135deg, var(--m-brand), var(--m-brand-2));
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.35); --shadow-md: 0 10px 28px rgba(0,0,0,.45); --shadow-glow: 0 0 0 3px rgba(124,108,255,.25);
+
+  /* OCR + LLM app (its own variable names) */
+  --surface: var(--m-surface); --surface-2: var(--m-surface-2); --faint: var(--m-faint); --line-strong: var(--m-line-2);
+  --brand: var(--m-brand); --brand-ink: var(--m-on-brand); --brand-soft: var(--m-brand-soft); --brand-line: var(--m-brand-line);
+  --ok-soft: #0F2A21; --warn-soft: #2D2210; --bad-soft: #301616; --info-soft: #0F2433;
+  --video-bg: #05070B; --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+}
+html:root body { background: var(--m-bg); color: var(--m-text); }
+
+/* Drishti: the few colours it hard-codes instead of using its variables */
+html:root header:not(.brand):not(.bar) { background: rgba(21,27,38,.92); border-bottom-color: var(--m-line); }
+html:root .blob { background: var(--m-brand) !important; opacity: .10; }
+html:root .landing-cta, html:root .hbtn-p, html:root .tbtn-p, html:root .mpill.on, html:root .msg.user,
+html:root .ask-btn, html:root .scan-pill { box-shadow: 0 2px 12px rgba(124,108,255,.35); }
+/* gesture control: primary buttons in the brand colour */
+html:root .startcam { background: var(--m-brand); color: var(--m-on-brand); }

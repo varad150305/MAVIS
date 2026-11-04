@@ -106,6 +106,7 @@ def mount(app: web.Application, relay: CameraRelay, relay_port: int, loopback_ho
         html = rewrite((MAVIS_STATIC / "index.html").read_text(encoding="utf-8"))
         html = html.replace("<head>", '<head><script src="/hub/static/device-pref.js"></script>', 1)
         html = html.replace("</body>", '<link rel="stylesheet" href="/hub/static/addons.css">\n'
+                                       '<link rel="stylesheet" href="/hub/static/mavis-theme.css">\n'
                                        '<script src="/hub/static/mavis-addon.js"></script>\n</body>')
         return web.Response(text=html, content_type="text/html", headers={"Cache-Control": "no-store"})
 
