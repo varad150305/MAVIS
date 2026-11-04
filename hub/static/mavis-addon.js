@@ -57,27 +57,33 @@
     c.toBlob((b) => { cam.busy = false; if (b && ws.readyState === 1) ws.send(b); }, 'image/jpeg', Q);
   }
 
-  async function start(box) {
+  async function start(box, phone = true) {
     const err = (m) => { box.querySelector('.ds-err').textContent = m || ''; };
     const btn = box.querySelector('button');
     err('');
+    box.querySelectorAll('button').forEach((b) => { b.disabled = true; });
     if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
       err('The browser only allows the camera on a secure page. Open the https:// link shown on the computer.'); return;
     }
     btn.disabled = true;
     stop();
     try {
-      cam.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: W }, height: { ideal: H } }, audio: false });
+      const video = { facingMode: { ideal: 'environment' }, width: { ideal: W }, height: { ideal: H } };
+      const id = window.MAVIS_findCamera ? await window.MAVIS_findCamera(phone) : null;
+      if (id) video.deviceId = { exact: id };
+      cam.stream = await navigator.mediaDevices.getUserMedia({ video, audio: false });
     } catch (e) {
-      err(e.name === 'NotAllowedError' ? 'Camera permission was refused.' : 'Could not start the camera: ' + e.message); btn.disabled = false; return;
+      err(e.name === 'NotAllowedError' ? 'Camera permission was refused.' : 'Could not start the camera: ' + e.message);
+      box.querySelectorAll('button').forEach((b) => { b.disabled = false; }); return;
     }
     const v = cameraVideo(); v.srcObject = cam.stream; await v.play().catch(() => {});
     cam.ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/hub/camera/ws');
     await new Promise((res, rej) => { cam.ws.onopen = res; cam.ws.onerror = rej; }).catch(() => {});
-    if (!cam.ws || cam.ws.readyState !== 1) { err('Could not connect to the computer.'); stop(); btn.disabled = false; return; }
+    if (!cam.ws || cam.ws.readyState !== 1) { err('Could not connect to the computer.'); stop(); box.querySelectorAll('button').forEach((b) => { b.disabled = false; }); return; }
     cam.timer = setInterval(sendFrame, 1000 / FPS);
     cam.badge = document.createElement('div'); cam.badge.className = 'ds-live';
-    cam.badge.innerHTML = '<i></i>This device is the camera';
+    const label = (cam.stream.getVideoTracks()[0] || {}).label || 'camera';
+    cam.badge.innerHTML = '<i></i>' + (/droidcam/i.test(label) ? 'Phone camera (DroidCam)' : 'Camera: ' + label.replace(/\(.*\)/, '').trim());
     document.body.appendChild(cam.badge);
     await new Promise((r) => setTimeout(r, 1200));            // a few frames first, so MAVIS can open the stream at once
     const sel = document.querySelector('#selector'), iv = document.querySelector('#interval');
@@ -85,7 +91,7 @@
     try {
       const r = await fetch('/hub/mavis/phone-scan', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.error?.message || 'MAVIS could not start the scan.'); }
-    } catch (e) { err(e.message); stop(); btn.disabled = false; return; }
+    } catch (e) { err(e.message); stop(); box.querySelectorAll('button').forEach((b) => { b.disabled = false; }); return; }
     // keep sending while MAVIS is scanning; stop by itself when the scan ends (MAVIS's own Stop / Cancel buttons)
     let seenScan = false;
     cam.watch = setInterval(async () => {
@@ -104,10 +110,17 @@
     if (!form || form.parentElement.querySelector('.ds-cam')) return;
     const box = document.createElement('div');
     box.className = 'ds-cam';
-    box.innerHTML = '<h3>📱 Use this device\'s camera</h3><p>Scan with the camera of the phone or laptop you are holding. No DroidCam app needed.</p>'
-      + '<button type="button" class="btn primary lg block">Start scanning with this camera</button><div class="ds-err" role="alert"></div>';
-    box.querySelector('button').addEventListener('click', () => start(box));
+    box.innerHTML = '<h3>📱 Scan with the phone (DroidCam)</h3><p>Uses the phone\'s DroidCam stream when it is connected; otherwise this device\'s own camera.</p>'
+      + '<button type="button" class="btn primary lg block" data-cam="phone">Start scanning with the phone camera</button>'
+      + '<button type="button" class="btn lg block" data-cam="laptop" style="margin-top:8px">Use this laptop\'s camera instead</button><div class="ds-err" role="alert"></div>';
+    box.querySelector('[data-cam="phone"]').addEventListener('click', () => start(box, true));
+    box.querySelector('[data-cam="laptop"]').addEventListener('click', () => start(box, false));
     form.parentElement.insertBefore(box, form);
+    // opened by gesture control: start scanning straight away with the phone camera
+    if (new URLSearchParams(location.search).get('autostart') === '1' && !window.__mavisAutostarted) {
+      window.__mavisAutostarted = true;
+      setTimeout(() => start(box, true), 600);
+    }
   }
   new MutationObserver(inject).observe(document.getElementById('main') || document.body, { childList: true, subtree: true });
   inject();

@@ -23,6 +23,21 @@
     const camOn = document.getElementById('startBtn') && document.getElementById('startBtn').disabled;
     t.innerHTML = `Opened in <b>${NAMES[mode] || mode}</b> mode.` + (camOn ? '' : ' Tap <b>Start Camera</b> to begin.');
     document.body.appendChild(t); setTimeout(() => t.remove(), 5000);
+    if (new URLSearchParams(location.search).get('autostart') === '1') autostart();
+  }
+  // opened by gesture control: start the camera and describe the scene once, without any tap
+  async function autostart() {
+    try {
+      const sb = document.getElementById('startBtn');
+      if (sb && !sb.disabled && typeof startCam === 'function') await startCam();
+      for (let i = 0; i < 40; i++) {                      // wait for the first camera frames
+        const v = document.querySelector('video');
+        if (v && v.videoWidth) break;
+        await new Promise((r) => setTimeout(r, 250));
+      }
+      await new Promise((r) => setTimeout(r, 800));
+      if (typeof snap === 'function') snap();
+    } catch (e) { /* the user can still tap the picture */ }
   }
   if (document.readyState === 'complete') setTimeout(go, 300); else window.addEventListener('load', () => setTimeout(go, 300));
 
@@ -54,8 +69,8 @@
 (function () {
   'use strict';
   const MOVED = {
-    text: { label: 'Read Text', to: 'OCR + LLM (Varad)', url: '/mavis/' },
-    translate: { label: 'Translate', to: 'Live Translation (Yogita)', url: '/translate/' },
+    text: { label: 'Read Text', to: 'OCR + LLM', url: '/mavis/' },
+    translate: { label: 'Translate', to: 'Live Translation', url: '/translate/' },
   };
   const css = document.createElement('style');
   css.textContent = '#pill-text, #pill-translate { display: none !important; }';

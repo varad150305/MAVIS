@@ -43,21 +43,41 @@ def host_config(data_dir: Path) -> str:
 
 
 def pick_microphone():
-    """MAVIS_TRANSLATION_MIC (e.g. "DroidCam"): first input device whose name contains it and accepts her format
-    (16 kHz mono). Windows lists one microphone once per audio API, so a bare name would be ambiguous.
-    Unset/empty -> None = her default (the system default input)."""
-    want = (os.environ.get("MAVIS_TRANSLATION_MIC") or "").strip()
-    if not want:
+    """Which microphone her worker opens (passed as SessionOptions(device=...)).
+
+    MAVIS_TRANSLATION_MIC set (e.g. "DroidCam"): the first input whose name contains it and accepts her format
+    (16 kHz mono) - Windows lists each microphone once per audio API, so a bare name would be ambiguous.
+    Not set: the laptop's microphone, i.e. the system default - unless that default is the phone's DroidCam
+    microphone, in which case the first other microphone (MAVIS keeps the phone for the OCR module)."""
+    try:
+        import sounddevice as sd
+    except ImportError:
         return None, "system default microphone"
-    import sounddevice as sd
-    for idx, info in enumerate(sd.query_devices()):
-        if info["max_input_channels"] > 0 and want.lower() in info["name"].lower():
-            try:
-                sd.check_input_settings(device=idx, samplerate=16000, channels=1, dtype="float32")
+
+    def usable(idx):
+        try:
+            sd.check_input_settings(device=idx, samplerate=16000, channels=1, dtype="float32")
+            return True
+        except Exception:  # noqa: BLE001
+            return False
+
+    devices = list(enumerate(sd.query_devices()))
+    want = (os.environ.get("MAVIS_TRANSLATION_MIC") or "").strip()
+    if want:
+        for idx, info in devices:
+            if info["max_input_channels"] > 0 and want.lower() in info["name"].lower() and usable(idx):
                 return idx, info["name"]
-            except Exception:  # noqa: BLE001
-                continue
-    return None, f"no input device matching {want!r}; using the system default microphone"
+        return None, f"no input device matching {want!r}; using the system default microphone"
+    try:
+        default = sd.query_devices(kind="input")["name"]
+    except Exception:  # noqa: BLE001
+        return None, "system default microphone"
+    if "droidcam" not in default.lower():
+        return None, default
+    for idx, info in devices:
+        if info["max_input_channels"] > 0 and "droidcam" not in info["name"].lower() and usable(idx):
+            return idx, info["name"]
+    return None, default
 
 
 def main():

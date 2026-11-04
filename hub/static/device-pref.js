@@ -1,7 +1,9 @@
-/* MAVIS: use the phone (DroidCam) for camera and microphone on every page.
-   Loaded first on every MAVIS page (launcher, gesture control, translation, OCR, Drishti). When a page asks for the
-   camera or microphone without naming a device, the DroidCam device is used if one exists ("DroidCam Source" camera,
-   "DroidCam Virtual Audio" microphone); otherwise the browser's normal choice. The modules' own code is unchanged. */
+/* MAVIS camera/microphone rule, loaded first on every MAVIS page (the modules' own code is unchanged):
+     - OCR + LLM pages (/mavis/...): use the phone's DroidCam stream ("DroidCam Source" camera) when present.
+     - every other page (gesture control, live translation, Drishti, launcher): use the laptop's own camera and
+       microphone, i.e. never the DroidCam devices when another device exists.
+   Applies only when a page asks without naming a device; a page that names a device (the OCR page's
+   "Use the laptop camera" button) gets exactly that device. If the chosen device fails, the browser default is used. */
 (function () {
   'use strict';
   const md = navigator.mediaDevices;
@@ -9,24 +11,38 @@
   md.__mavisPref = true;
   const orig = md.getUserMedia.bind(md);
   const RE = /droidcam/i;
-  async function find(kind) {
-    try { const d = (await md.enumerateDevices()).find((x) => x.kind === kind && RE.test(x.label)); return d ? d.deviceId : null; }
-    catch (e) { return null; }
+  const PREFER_PHONE = /^\/mavis(\/|$)/.test(location.pathname);
+  window.MAVIS_DEVICE_RULE = PREFER_PHONE ? 'phone (DroidCam)' : 'laptop';
+
+  async function pick(kind) {
+    let list = [];
+    try { list = (await md.enumerateDevices()).filter((d) => d.kind === kind); } catch (e) { return null; }
+    if (!list.some((d) => RE.test(d.label))) return null;          // no DroidCam device (or names hidden): browser default
+    const d = PREFER_PHONE ? list.find((x) => RE.test(x.label)) : list.find((x) => x.label && !RE.test(x.label));
+    return d ? d.deviceId : null;
   }
+  const named = (v) => v && typeof v === 'object' && v.deviceId;
   const asObj = (v) => (v === true ? {} : { ...v });
-  async function prefer(c) {
+  async function choose(c) {
     const out = { ...c };
-    if (out.video && !(typeof out.video === 'object' && out.video.deviceId)) { const id = await find('videoinput'); if (id) out.video = { ...asObj(out.video), deviceId: { exact: id } }; }
-    if (out.audio && !(typeof out.audio === 'object' && out.audio.deviceId)) { const id = await find('audioinput'); if (id) out.audio = { ...asObj(out.audio), deviceId: { exact: id } }; }
+    if (out.video && !named(out.video)) { const id = await pick('videoinput'); if (id) out.video = { ...asObj(out.video), deviceId: { exact: id } }; }
+    if (out.audio && !named(out.audio)) { const id = await pick('audioinput'); if (id) out.audio = { ...asObj(out.audio), deviceId: { exact: id } }; }
     return out;
   }
+  window.MAVIS_findCamera = async function (phone) {            // used by the OCR page's two buttons
+    try {
+      const cams = (await md.enumerateDevices()).filter((d) => d.kind === 'videoinput');
+      const d = phone ? cams.find((x) => RE.test(x.label)) : cams.find((x) => x.label && !RE.test(x.label));
+      return d ? d.deviceId : null;
+    } catch (e) { return null; }
+  };
   md.getUserMedia = async function (constraints) {
     const c = constraints || {};
-    let want = await prefer(c);
+    let want = await choose(c);
     try {
       const s = await orig(want);
-      // Before the first permission the device names are hidden; look again now that they are visible.
-      const again = await prefer(c);
+      // before the first permission the device names are hidden: decide again now that they are visible
+      const again = await choose(c);
       if (JSON.stringify(again) !== JSON.stringify(want)) {
         s.getTracks().forEach((t) => t.stop());
         want = again;
@@ -34,7 +50,7 @@
       }
       return s;
     } catch (e) {
-      if (want !== c) return orig(c);   // the DroidCam device refused the request: fall back to the default
+      if (JSON.stringify(want) !== JSON.stringify(c)) return orig(c);
       throw e;
     }
   };

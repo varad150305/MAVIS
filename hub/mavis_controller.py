@@ -3,9 +3,9 @@
 Flow (agreed with the team):
 
     IDLE --(thumbs up)--> READY  (waits READY_SECONDS for a choice)
-    READY --(1 finger)--> ACTIVE: OCR + LLM            (Varad's MAVIS OCR)
-    READY --(2 fingers)-> ACTIVE: Live translation      (Yogita's translation module)
-    READY --(3 fingers)-> ACTIVE: Drishti               (Harsh's Drishti)
+    READY --(1 finger)--> ACTIVE: OCR + LLM            (MAVIS OCR)
+    READY --(2 fingers)-> ACTIVE: Live translation      (translation module)
+    READY --(3 fingers)-> ACTIVE: Drishti               (Drishti)
     READY --(open palm or timeout)--> IDLE
     ACTIVE --(open palm)--> IDLE   (the module is turned off)
 
@@ -18,9 +18,9 @@ from __future__ import annotations
 READY_SECONDS = 8.0
 
 MODULES = {
-    "one_finger": {"id": "ocr", "label": "OCR + LLM", "owner": "Varad", "url": "/mavis/"},
-    "two_fingers": {"id": "translation", "label": "Live Translation", "owner": "Yogita", "url": "/translate/?autostart=1"},
-    "three_fingers": {"id": "drishti", "label": "Drishti", "owner": "Harsh", "url": "/drishti/?mode=describe"},
+    "one_finger": {"id": "ocr", "label": "OCR + LLM", "url": "/mavis/?autostart=1"},
+    "two_fingers": {"id": "translation", "label": "Live Translation", "url": "/translate/?autostart=1"},
+    "three_fingers": {"id": "drishti", "label": "Drishti", "url": "/drishti/?mode=describe&autostart=1"},
 }
 READY_GESTURE = "thumbs_up"
 OFF_GESTURE = "open_palm"
