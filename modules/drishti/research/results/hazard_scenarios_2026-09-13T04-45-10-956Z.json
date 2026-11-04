@@ -1,0 +1,343 @@
+{
+  "frameW": 1280,
+  "frameH": 720,
+  "generatedAt": "2026-09-13T04:45:10.959Z",
+  "results": [
+    {
+      "id": 1,
+      "description": "Person standing directly ahead, close range, in the walking corridor",
+      "class": "person",
+      "bbox": [
+        340,
+        150,
+        600,
+        550
+      ],
+      "hazard": {
+        "object": "person",
+        "riskLevel": "CRITICAL",
+        "score": 13.5,
+        "clockPosition": "12 o'clock",
+        "distance": "VERY_CLOSE",
+        "distanceConfidence": "HIGH",
+        "movement": "unknown",
+        "inPath": true,
+        "reason": "person in your path, very close"
+      },
+      "inPath": true,
+      "clock": "12 o'clock",
+      "proximity": {
+        "bucket": "VERY_CLOSE",
+        "confidence": "HIGH"
+      }
+    },
+    {
+      "id": 2,
+      "description": "Person far across the street, small in frame",
+      "class": "person",
+      "bbox": [
+        600,
+        300,
+        40,
+        80
+      ],
+      "hazard": {
+        "object": "person",
+        "riskLevel": "MEDIUM",
+        "score": 1.3499999999999999,
+        "clockPosition": "12 o'clock",
+        "distance": "FAR",
+        "distanceConfidence": "MEDIUM",
+        "movement": "unknown",
+        "inPath": true,
+        "reason": "person in your path, far"
+      },
+      "inPath": true,
+      "clock": "12 o'clock",
+      "proximity": {
+        "bucket": "FAR",
+        "confidence": "MEDIUM"
+      }
+    },
+    {
+      "id": 3,
+      "description": "Car approaching head-on in the corridor, close",
+      "class": "car",
+      "bbox": [
+        340,
+        150,
+        600,
+        550
+      ],
+      "hazard": {
+        "object": "car",
+        "riskLevel": "CRITICAL",
+        "score": 22.5,
+        "clockPosition": "12 o'clock",
+        "distance": "VERY_CLOSE",
+        "distanceConfidence": "HIGH",
+        "movement": "unknown",
+        "inPath": true,
+        "reason": "car in your path, very close"
+      },
+      "inPath": true,
+      "clock": "12 o'clock",
+      "proximity": {
+        "bucket": "VERY_CLOSE",
+        "confidence": "HIGH"
+      }
+    },
+    {
+      "id": 4,
+      "description": "Car parked at the far side of the frame, not in the walking corridor",
+      "class": "car",
+      "bbox": [
+        20,
+        600,
+        80,
+        60
+      ],
+      "hazard": {
+        "object": "car",
+        "riskLevel": "LOW",
+        "score": 0.8999999999999999,
+        "clockPosition": "9 o'clock",
+        "distance": "FAR",
+        "distanceConfidence": "MEDIUM",
+        "movement": "unknown",
+        "inPath": false,
+        "reason": "car in view, far"
+      },
+      "inPath": false,
+      "clock": "9 o'clock",
+      "proximity": {
+        "bucket": "FAR",
+        "confidence": "MEDIUM"
+      }
+    },
+    {
+      "id": 5,
+      "description": "Bicycle passing on the far left, not in the corridor",
+      "class": "bicycle",
+      "bbox": [
+        5,
+        200,
+        200,
+        460
+      ],
+      "hazard": {
+        "object": "bicycle",
+        "riskLevel": "MEDIUM",
+        "score": 1.7999999999999998,
+        "clockPosition": "9 o'clock",
+        "distance": "MEDIUM",
+        "distanceConfidence": "HIGH",
+        "movement": "unknown",
+        "inPath": false,
+        "reason": "bicycle in view, medium"
+      },
+      "inPath": false,
+      "clock": "9 o'clock",
+      "proximity": {
+        "bucket": "MEDIUM",
+        "confidence": "HIGH"
+      }
+    },
+    {
+      "id": 6,
+      "description": "Dog close by, directly ahead",
+      "class": "dog",
+      "bbox": [
+        400,
+        300,
+        500,
+        400
+      ],
+      "hazard": {
+        "object": "dog",
+        "riskLevel": "CRITICAL",
+        "score": 6,
+        "clockPosition": "12 o'clock",
+        "distance": "CLOSE",
+        "distanceConfidence": "HIGH",
+        "movement": "unknown",
+        "inPath": true,
+        "reason": "dog in your path, close"
+      },
+      "inPath": true,
+      "clock": "12 o'clock",
+      "proximity": {
+        "bucket": "CLOSE",
+        "confidence": "HIGH"
+      }
+    },
+    {
+      "id": 7,
+      "description": "Chair directly ahead, close (indoor obstacle)",
+      "class": "chair",
+      "bbox": [
+        340,
+        150,
+        600,
+        550
+      ],
+      "hazard": {
+        "object": "chair",
+        "riskLevel": "HIGH",
+        "score": 4.5,
+        "clockPosition": "12 o'clock",
+        "distance": "VERY_CLOSE",
+        "distanceConfidence": "HIGH",
+        "movement": "unknown",
+        "inPath": true,
+        "reason": "chair in your path, very close"
+      },
+      "inPath": true,
+      "clock": "12 o'clock",
+      "proximity": {
+        "bucket": "VERY_CLOSE",
+        "confidence": "HIGH"
+      }
+    },
+    {
+      "id": 8,
+      "description": "Bench off to the side, far away",
+      "class": "bench",
+      "bbox": [
+        20,
+        600,
+        80,
+        60
+      ],
+      "hazard": {
+        "object": "bench",
+        "riskLevel": "LOW",
+        "score": 0.18,
+        "clockPosition": "9 o'clock",
+        "distance": "FAR",
+        "distanceConfidence": "MEDIUM",
+        "movement": "unknown",
+        "inPath": false,
+        "reason": "bench in view, far"
+      },
+      "inPath": false,
+      "clock": "9 o'clock",
+      "proximity": {
+        "bucket": "FAR",
+        "confidence": "MEDIUM"
+      }
+    },
+    {
+      "id": 9,
+      "description": "Motorcycle close, off to the side but not in the direct corridor",
+      "class": "motorcycle",
+      "bbox": [
+        100,
+        150,
+        400,
+        500
+      ],
+      "hazard": {
+        "object": "motorcycle",
+        "riskLevel": "HIGH",
+        "score": 4.8,
+        "clockPosition": "10 o'clock",
+        "distance": "CLOSE",
+        "distanceConfidence": "HIGH",
+        "movement": "unknown",
+        "inPath": false,
+        "reason": "motorcycle in view, close"
+      },
+      "inPath": false,
+      "clock": "10 o'clock",
+      "proximity": {
+        "bucket": "CLOSE",
+        "confidence": "HIGH"
+      }
+    },
+    {
+      "id": 10,
+      "description": "Bus far away, centered",
+      "class": "bus",
+      "bbox": [
+        560,
+        300,
+        160,
+        120
+      ],
+      "hazard": {
+        "object": "bus",
+        "riskLevel": "MEDIUM",
+        "score": 2.25,
+        "clockPosition": "12 o'clock",
+        "distance": "FAR",
+        "distanceConfidence": "MEDIUM",
+        "movement": "unknown",
+        "inPath": true,
+        "reason": "bus in your path, far"
+      },
+      "inPath": true,
+      "clock": "12 o'clock",
+      "proximity": {
+        "bucket": "FAR",
+        "confidence": "MEDIUM"
+      }
+    },
+    {
+      "id": 11,
+      "description": "Stop sign nearby, off to the side",
+      "class": "stop sign",
+      "bbox": [
+        1000,
+        300,
+        200,
+        150
+      ],
+      "hazard": {
+        "object": "stop sign",
+        "riskLevel": "LOW",
+        "score": 0.09,
+        "clockPosition": "3 o'clock",
+        "distance": "FAR",
+        "distanceConfidence": "MEDIUM",
+        "movement": "unknown",
+        "inPath": false,
+        "reason": "stop sign in view, far"
+      },
+      "inPath": false,
+      "clock": "3 o'clock",
+      "proximity": {
+        "bucket": "FAR",
+        "confidence": "MEDIUM"
+      }
+    },
+    {
+      "id": 12,
+      "description": "Truck close, in the corridor, cut off by the bottom frame edge",
+      "class": "truck",
+      "bbox": [
+        400,
+        200,
+        650,
+        520
+      ],
+      "hazard": {
+        "object": "truck",
+        "riskLevel": "CRITICAL",
+        "score": 22.5,
+        "clockPosition": "12 o'clock",
+        "distance": "VERY_CLOSE",
+        "distanceConfidence": "LOW",
+        "movement": "unknown",
+        "inPath": true,
+        "reason": "truck in your path, very close"
+      },
+      "inPath": true,
+      "clock": "12 o'clock",
+      "proximity": {
+        "bucket": "VERY_CLOSE",
+        "confidence": "LOW"
+      }
+    }
+  ]
+}

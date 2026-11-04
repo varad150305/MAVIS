@@ -1,0 +1,43 @@
+{
+  "camera": {
+    "index": 0,
+    "mirror": true,
+    "width": 640,
+    "height": 480
+  },
+  "tracking": {
+    "max_hands": 1,
+    "model_complexity": 1,
+    "detection_conf": 0.7,
+    "tracking_conf": 0.6
+  },
+  "classifier": {
+    "mode": "rules",
+    "landmark_source": "world",
+    "extended_threshold": 0.6,
+    "folded_threshold": 0.4,
+    "loose_folded_max": 0.5,
+    "open_palm_min_spread_deg": 12.0,
+    "open_palm_min_thumb_deg": 18.0,
+    "thumbs_up_max_angle_deg": 80.0,
+    "max_tilt_deg": 72.0,
+    "tilt_exempt": ["thumbs_up"],
+    "min_handedness_score": 0.5,
+    "min_palm_px": 28.0,
+    "max_out_of_frame": 1
+  },
+  "knn": {
+    "calibration_file": "config/calibration_samples.json",
+    "k": 3,
+    "max_distance": 0.3,
+    "min_margin": 1.15,
+    "fallback_min_confidence": 0.5
+  },
+  "stability": {
+    "stable_frames": 5,
+    "min_confidence": 0.55,
+    "cooldown_sec": 0.8,
+    "release_sec": 0.4,
+    "rearm_after_loss_sec": 1.0
+  }
+}

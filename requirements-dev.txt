@@ -1,0 +1,5 @@
+# Tests (hub + MAVIS + gesture):  .venv\Scripts\python -m pip install --no-deps -r requirements-dev.txt
+pytest==9.1.1
+iniconfig==2.3.0
+pluggy==1.6.0
+pygments==2.19.2

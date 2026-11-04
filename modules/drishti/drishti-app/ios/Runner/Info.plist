@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- App name -->
+    <key>CFBundleName</key>
+    <string>Drishti</string>
+    <key>CFBundleDisplayName</key>
+    <string>Drishti दृष्टि</string>
+
+    <!-- Required Flutter keys -->
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>$(FLUTTER_BUILD_NAME)</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleVersion</key>
+    <string>$(FLUTTER_BUILD_NUMBER)</string>
+
+    <!-- Camera permission -->
+    <key>NSCameraUsageDescription</key>
+    <string>Drishti needs camera access to describe the scene, read text, and detect objects for visually impaired users.</string>
+
+    <!-- Microphone permission -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Drishti needs microphone access so you can ask questions about the scene using your voice.</string>
+
+    <!-- Location permission -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Drishti uses your location for navigation assistance and to share it in emergency SOS alerts.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Drishti uses your location for navigation assistance and emergency SOS.</string>
+
+    <!-- Speech recognition -->
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Drishti uses speech recognition so you can ask questions about what the camera sees.</string>
+
+    <!-- Photo library (not strictly required, but avoids App Store rejection) -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Drishti may save or read photos for scene analysis.</string>
+
+    <!-- Orientation — portrait only -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    </array>
+
+    <!-- Flutter -->
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+
+    <!-- Status bar style for dark theme -->
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleLightContent</string>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
+
+    <!-- Background modes: location for nav, audio for TTS -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>audio</string>
+        <string>location</string>
+    </array>
+
+    <!-- Allow arbitrary HTTP (for Groq + Sarvam) -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+</dict>
+</plist>

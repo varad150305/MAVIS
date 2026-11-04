@@ -1,0 +1,24 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# test / tool caches
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# local data that must not be committed
+config/calibration_samples.json
+*.tmp
+*.log
+logs/

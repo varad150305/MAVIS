@@ -1,0 +1,57 @@
+{
+  "settings": {
+    "camera_index": 0,
+    "mirror": true,
+    "stable_frames": 4,
+    "hold_sec": 0.6,
+    "cooldown_sec": 0.8,
+    "knn_threshold": 0.18,
+    "cursor_smoothing": 0.35
+  },
+  "gestures": {
+    "open_palm": {
+      "type": "pattern",
+      "pattern": [1, 1, 1, 1, 1],
+      "mode": "hold",
+      "do": {"action": "press", "keys": ["playpause"]}
+    },
+    "fist": {
+      "type": "pattern",
+      "pattern": [0, 0, 0, 0, 0],
+      "mode": "hold",
+      "do": {"action": "press", "keys": ["volumemute"]}
+    },
+    "peace": {
+      "type": "pattern",
+      "pattern": [0, 1, 1, 0, 0],
+      "mode": "hold",
+      "do": {"action": "hotkey", "keys": ["alt", "tab"]}
+    },
+    "point_up": {
+      "type": "pattern",
+      "pattern": [0, 1, 0, 0, 0],
+      "mode": "toggle",
+      "do": {"action": "mouse_mode"}
+    },
+    "pinky": {
+      "type": "pattern",
+      "pattern": [0, 0, 0, 0, 1],
+      "mode": "hold",
+      "repeat_sec": 0.35,
+      "do": {"action": "scroll", "amount": -300}
+    },
+    "thumb_pinky": {
+      "type": "pattern",
+      "pattern": [1, 0, 0, 0, 1],
+      "mode": "hold",
+      "repeat_sec": 0.35,
+      "do": {"action": "scroll", "amount": 300}
+    },
+    "three": {
+      "type": "pattern",
+      "pattern": [0, 1, 1, 1, 0],
+      "mode": "hold",
+      "do": {"action": "click", "button": "left"}
+    }
+  }
+}

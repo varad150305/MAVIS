@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Everything MAVIS writes while running: scan photos, OCR text and conversations are USER DATA, never commit them
+exports/
+tests/exports/
+
+# Models are downloaded on first use (RapidOCR caches them here); not redistributed in this repository
+prototype/models/
+
+# Local tool state and editor files
+.claude/
+.vscode/
+.idea/
+
+# Secrets (keys are read from environment variables and must never be written to files)
+.env
+.env.*
+*.key

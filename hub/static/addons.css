@@ -1,0 +1,60 @@
+/* Small additions the hub puts on top of the MAVIS and Drishti pages (their own files are unchanged). */
+.ds-home {
+  position: fixed; z-index: 2147483000; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px 9px 11px; border-radius: 99px;
+  background: #1D1A15; color: #F6F1E7; font: 600 14px/1 Inter, system-ui, sans-serif; text-decoration: none;
+  box-shadow: 0 6px 20px rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.12); opacity: .92;
+}
+.ds-home:hover, .ds-home:focus-visible { opacity: 1; }
+.ds-home.ds-top { left: auto; right: max(12px, env(safe-area-inset-right)); bottom: auto; top: max(12px, env(safe-area-inset-top)); transform: none; }
+.ds-home.ds-inline { position: static; transform: none; box-shadow: none; margin-right: 8px; padding: 8px 13px 8px 9px; font-size: 13px; }
+.ds-home svg { width: 16px; height: 16px; }
+@media (min-width: 901px) { .ds-narrow-only { display: none !important; } }
+.ds-side-home { display: flex; align-items: center; gap: 6px; margin: 4px 12px 8px; padding: 8px 10px; border-radius: 10px;
+  font: 600 13px/1.2 Inter, system-ui, sans-serif; text-decoration: none; color: inherit; opacity: .75; }
+.ds-side-home:hover, .ds-side-home:focus-visible { opacity: 1; background: rgba(127,127,127,.12); }
+.ds-side-home svg { width: 15px; height: 15px; flex: none; }
+.ds-toast {
+  position: fixed; z-index: 2147483001; left: 50%; top: max(14px, env(safe-area-inset-top)); transform: translateX(-50%);
+  max-width: min(92vw, 520px); background: #1D1A15; color: #F6F1E7; border-radius: 16px; padding: 12px 16px;
+  font: 500 15px/1.4 Inter, system-ui, sans-serif; box-shadow: 0 10px 30px rgba(0,0,0,.3); text-align: center;
+}
+.ds-toast b { color: #2DD4BF; }
+
+/* MAVIS: "use this device's camera" */
+.ds-cam { margin-bottom: 14px; padding: 14px; border-radius: 14px; border: 1.5px dashed currentColor; }
+.ds-cam h3 { margin: 0 0 4px; font-size: 16px; }
+.ds-cam p { margin: 0 0 10px; opacity: .8; font-size: 14px; }
+.ds-cam video { display: none; }
+.ds-cam .ds-err { color: #DC2626; font-size: 14px; }
+.ds-cam .ds-err:not(:empty) { margin-top: 8px; }
+.ds-live {
+  position: fixed; z-index: 2147483000; left: 50%; transform: translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 8px; background: #1D1A15; color: #F6F1E7; border-radius: 99px;
+  padding: 7px 12px; font: 600 12px/1 Inter, system-ui, sans-serif; box-shadow: 0 6px 18px rgba(0,0,0,.25); white-space: nowrap; opacity: .9;
+}
+.ds-live i { width: 9px; height: 9px; border-radius: 50%; background: #EF4444; animation: dsblink 1.2s infinite; }
+@keyframes dsblink { 50% { opacity: .3; } }
+
+/* MAVIS on a phone screen. MAVIS was built for a computer screen (the phone was only its DroidCam). On a narrow screen,
+   its scanning page grew wider than the phone (grid tracks sized to their content). These rules only apply below
+   640px wide and only change sizing, so nothing is lost on a computer. */
+@media (max-width: 900px) {
+  .scan .topbar h1 { margin-right: 96px; }           /* room for the Modes button at the top right */
+}
+@media (max-width: 640px) {
+  .scan-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .scan-grid > *, .scan > * { min-width: 0; }
+  .scan .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .scan .topbar { gap: 8px; }
+  .scan .topbar .chip { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .scan .topbar #stop { flex: 1 1 100%; justify-content: center; }
+}
+@media (max-width: 640px) {
+  .scan .page { grid-template-columns: 78px minmax(0, 1fr) !important; }
+  .scan .page * { overflow-wrap: anywhere; min-width: 0; }
+}
+@media (max-width: 640px) {
+  .scan .side-col, .scan .scan-grid > div { grid-template-columns: minmax(0, 1fr) !important; }
+  .scan .side-col > *, .scan .feed-card > * { min-width: 0; }
+}

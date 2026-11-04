@@ -1,0 +1,28 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Flutter build output
+drishti-app/build/
+drishti-app/.dart_tool/
+drishti-app/.flutter-plugins
+drishti-app/.flutter-plugins-dependencies
+drishti-app/.packages
+drishti-app/android/.gradle/
+drishti-app/android/local.properties
+drishti-app/android/app/debug/
+drishti-app/android/app/release/
+drishti-app/ios/.symlinks/
+drishti-app/ios/Pods/
+drishti-app/ios/Runner.xcworkspace/
+
+# Node (if running local server)
+node_modules/
+.vercel/
+.netlify/
+
+# Secrets — never commit API keys
+*.env
+.env*
+secrets.json

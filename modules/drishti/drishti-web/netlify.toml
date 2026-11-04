@@ -1,0 +1,10 @@
+[build]
+  publish = "."          # deploy this folder as-is
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Permissions-Policy = "camera=*, microphone=*, geolocation=*"
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"

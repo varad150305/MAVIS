@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drishti — AI Eyes for the Visually Impaired</title>
+  <meta name="description" content="Drishti gives blind and visually impaired people an AI voice assistant that describes the world around them — in their language." />
+  <style>
+    :root {
+      --bg: #06060a;
+      --surface: #0f0f17;
+      --surface2: #16161f;
+      --border: #1e1e2e;
+      --accent: #7c3aed;
+      --accent2: #a78bfa;
+      --accent3: #c4b5fd;
+      --text: #f1f0ff;
+      --muted: #888aaa;
+      --green: #22c55e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 5%;
+      background: rgba(6,6,10,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; color: var(--text); }
+    .nav-logo span { color: var(--accent2); }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff; font-size: 13px; font-weight: 700;
+      padding: 9px 20px; border-radius: 8px; text-decoration: none; transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .85; }
+
+    /* ── Sections ── */
+    section { padding: 100px 5%; }
+    .center { text-align: center; }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 5% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glow orbs */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+      top: -100px; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 70%);
+      bottom: 0; right: 10%;
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.3);
+      color: var(--accent3);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 20px;
+      margin-bottom: 28px;
+    }
+    .pulse-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      max-width: 800px;
+    }
+    h1 .grad {
+      background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 40%, #c4b5fd 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 700;
+      text-decoration: none; transition: all .2s;
+      box-shadow: 0 0 30px rgba(124,58,237,0.3);
+    }
+    .btn-primary:hover { opacity: .88; box-shadow: 0 0 40px rgba(124,58,237,0.5); }
+    .btn-ghost {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+      padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600;
+      text-decoration: none; transition: all .2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
+      padding: 24px 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 700px; margin: 0 auto;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ── Problem ── */
+    .problem { background: var(--surface); }
+    .problem-inner { max-width: 900px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent2); margin-bottom: 16px;
+    }
+    h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 20px; }
+    .lead { font-size: 18px; color: var(--muted); line-height: 1.75; max-width: 640px; }
+    .problem-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+    .prob-card {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 14px;
+      padding: 24px; position: relative; overflow: hidden;
+    }
+    .prob-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    .prob-icon { font-size: 28px; margin-bottom: 14px; }
+    .prob-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .prob-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    /* ── How it works ── */
+    .how-inner { max-width: 1000px; margin: 0 auto; }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 52px; }
+    .step {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 28px 22px; text-align: center; position: relative;
+      transition: border-color .2s, transform .2s;
+    }
+    .step:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
+      color: var(--accent2); font-size: 16px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step-icon { font-size: 30px; margin-bottom: 12px; }
+    .step-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .step-text { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* Arrow between steps */
+    .step:not(:last-child)::after {
+      content: '→';
+      position: absolute; right: -14px; top: 50%; transform: translateY(-50%);
+      color: var(--accent2); font-size: 16px; z-index: 1;
+    }
+
+    /* ── Features ── */
+    .features-bg { background: var(--surface); }
+    .features-inner { max-width: 1060px; margin: 0 auto; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 52px; }
+    .feat-card {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 28px; transition: all .2s;
+    }
+    .feat-card:hover { border-color: rgba(124,58,237,.4); transform: translateY(-2px); }
+    .feat-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.2);
+      font-size: 22px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feat-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .feat-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .feat-tag {
+      display: inline-block; margin-top: 12px;
+      font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--accent2); background: rgba(124,58,237,.1); border: 1px solid rgba(124,58,237,.2);
+      padding: 3px 8px; border-radius: 20px;
+    }
+
+    /* ── Languages ── */
+    .langs-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+    .lang-chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 36px; }
+    .lang-chip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 40px; padding: 10px 20px;
+      font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+      transition: all .2s;
+    }
+    .lang-chip:hover { border-color: var(--accent2); color: var(--accent2); }
+    .lang-chip .lscript { font-size: 18px; }
+
+    /* ── Use cases ── */
+    .usecases-bg { background: var(--surface); }
+    .usecases-inner { max-width: 1000px; margin: 0 auto; }
+    .uc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 48px; }
+    .uc-card {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 28px; display: flex; gap: 18px; align-items: flex-start;
+      transition: border-color .2s;
+    }
+    .uc-card:hover { border-color: rgba(124,58,237,.4); }
+    .uc-icon { font-size: 36px; flex-shrink: 0; }
+    .uc-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .uc-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .uc-quote {
+      margin-top: 12px; font-size: 12px; font-style: italic;
+      color: var(--accent3);
+      border-left: 2px solid var(--accent); padding-left: 10px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: ''; position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 65%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .cta-inner { position: relative; max-width: 620px; margin: 0 auto; }
+    .cta-inner h2 { margin-bottom: 16px; }
+    .cta-inner p { color: var(--muted); font-size: 17px; margin-bottom: 36px; }
+    .cta-form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+    .cta-input {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 13px 18px;
+      color: var(--text); font-size: 15px; outline: none; width: 280px;
+      transition: border-color .2s;
+    }
+    .cta-input:focus { border-color: var(--accent); }
+    .cta-input::placeholder { color: var(--muted); }
+    .cta-note { font-size: 12px; color: var(--muted); }
+    .cta-note a { color: var(--accent2); text-decoration: none; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo { font-size: 18px; font-weight: 800; color: var(--text); }
+    .footer-logo span { color: var(--accent2); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 12px; color: var(--muted); }
+
+    /* ── Demo strip ── */
+    .demo-strip {
+      background: linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(167,139,250,0.05) 100%);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 20px; padding: 48px 40px;
+      max-width: 900px; margin: 0 auto;
+      text-align: center;
+    }
+    .demo-strip h3 { font-size: 26px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .demo-strip p { color: var(--muted); margin-bottom: 28px; font-size: 16px; }
+    .demo-modes { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+    .demo-mode {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; color: var(--muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .problem-cards { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .step:not(:last-child)::after { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .uc-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; text-align: center; }
+    }
+
+    /* ── Animations ── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: all .6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="#" class="nav-logo">Drishti <span>दृष्टि</span></a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#languages">Languages</a>
+    <a href="#usecases">Use Cases</a>
+    <a href="../drishti-web/index.html" target="_blank">Try Demo</a>
+  </div>
+  <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-eyebrow"><div class="pulse-dot"></div> Now in beta · Free to use</div>
+  <h1>The world, <span class="grad">described</span><br/>in your language.</h1>
+  <p class="hero-sub">Drishti is an AI-powered assistant that gives blind and visually impaired people real-time audio descriptions of everything around them — people, objects, text, navigation — in Hindi, Tamil, Telugu, and more.</p>
+  <div class="hero-btns">
+    <a href="../drishti-web/index.html" target="_blank" class="btn-primary">Try Drishti Free →</a>
+    <a href="#how" class="btn-ghost">See how it works</a>
+  </div>
+  <div class="stats-bar fade-up">
+    <div class="stat"><div class="stat-num">8M+</div><div class="stat-label">Blind people in India</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">Indian languages</div></div>
+    <div class="stat"><div class="stat-num">₹0</div><div class="stat-label">Cost to start</div></div>
+    <div class="stat"><div class="stat-num">&lt;2s</div><div class="stat-label">Response time</div></div>
+  </div>
+</section>
+
+<!-- ── Problem ── -->
+<section class="problem" id="problem">
+  <div class="problem-inner fade-up">
+    <div class="section-label">The Problem</div>
+    <h2>Existing tools weren't built for India.</h2>
+    <p class="lead">Apps like Seeing AI and Be My Eyes work only in English. India has the world's largest blind population — and almost no accessibility technology in their language.</p>
+    <div class="problem-cards">
+      <div class="prob-card">
+        <div class="prob-icon">🌍</div>
+        <div class="prob-title">Language barrier</div>
+        <div class="prob-text">Global assistive apps speak English. Over 90% of India's visually impaired population primarily speaks regional languages.</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">💸</div>
+        <div class="prob-title">Prohibitive cost</div>
+        <div class="prob-text">Most premium assistive devices cost ₹20,000–₹80,000. Smartphones are already in everyone's pocket.</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">🧭</div>
+        <div class="prob-title">No independence</div>
+        <div class="prob-text">Simple tasks — reading a label, crossing a road, knowing who's in the room — require constant help from others.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ── -->
+<section id="how">
+  <div class="how-inner fade-up center">
+    <div class="section-label">How It Works</div>
+    <h2>Point. Ask. Listen.</h2>
+    <p style="color:var(--muted);max-width:500px;margin:0 auto;font-size:16px;">Four steps. No reading required. No setup. Works on any smartphone.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">📱</div>
+        <div class="step-num">1</div>
+        <div class="step-title">Open Drishti</div>
+        <div class="step-text">No app download needed. Open in any browser. Camera and mic start automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-icon">📷</div>
+        <div class="step-num">2</div>
+        <div class="step-title">Point your camera</div>
+        <div class="step-text">At anything — a person, a sign, a product, a road, a notebook, a medicine label.</div>
+      </div>
+      <div class="step">
+        <div class="step-icon">🎙️</div>
+        <div class="step-num">3</div>
+        <div class="step-title">Ask or tap</div>
+        <div class="step-text">Speak a question in your language — or just tap Snap for an instant description.</div>
+      </div>
+      <div class="step">
+        <div class="step-icon">🔊</div>
+        <div class="step-num">4</div>
+        <div class="step-title">Drishti speaks</div>
+        <div class="step-text">A clear, natural voice describes exactly what's in front of you — in seconds.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ── -->
+<section class="features-bg" id="features">
+  <div class="features-inner fade-up center">
+    <div class="section-label">Features</div>
+    <h2>Everything a sighted person takes for granted.</h2>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🔍</div>
+        <div class="feat-title">Scene Description</div>
+        <div class="feat-text">Point your camera anywhere and get a natural, 2-3 sentence description of exactly what's in front of you — people, objects, surroundings.</div>
+        <span class="feat-tag">Live</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📄</div>
+        <div class="feat-title">Read Any Text</div>
+        <div class="feat-text">Reads printed text, handwriting, medicine labels, menus, signs, and documents aloud. Point at a page — Drishti reads it.</div>
+        <span class="feat-tag">Live</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">👥</div>
+        <div class="feat-title">People Awareness</div>
+        <div class="feat-text">Tells you how many people are nearby, what they look like, what they're doing — so you always know who's around you.</div>
+        <span class="feat-tag">Live</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🗺️</div>
+        <div class="feat-title">Navigation Mode</div>
+        <div class="feat-text">Real-time obstacle detection and turn-by-turn guidance. "Walk forward — clear path" or "Stop — steps ahead." Safety first, always.</div>
+        <span class="feat-tag">Beta</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💰</div>
+        <div class="feat-title">Price Comparison</div>
+        <div class="feat-text">Snap a product and instantly hear its price across Amazon, Flipkart, and other Indian platforms — no reading required.</div>
+        <span class="feat-tag">Live</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎙️</div>
+        <div class="feat-title">Voice Q&A</div>
+        <div class="feat-text">Ask any question about what the camera sees — in any language. "What colour is this?" "Does this shirt have a logo?" Drishti answers.</div>
+        <span class="feat-tag">Live</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Languages ── -->
+<section id="languages">
+  <div class="langs-inner fade-up">
+    <div class="section-label">Languages</div>
+    <h2>Built for Bharat, not just English.</h2>
+    <p style="color:var(--muted);font-size:16px;margin-top:12px;">Powered by Sarvam AI — the only Indian-language voice AI built for Indian accents, dialects, and contexts.</p>
+    <div class="lang-chips">
+      <div class="lang-chip"><span class="lscript">हि</span> Hindi</div>
+      <div class="lang-chip"><span class="lscript">த</span> Tamil</div>
+      <div class="lang-chip"><span class="lscript">తె</span> Telugu</div>
+      <div class="lang-chip"><span class="lscript">ಕ</span> Kannada</div>
+      <div class="lang-chip"><span class="lscript">മ</span> Malayalam</div>
+      <div class="lang-chip"><span class="lscript">বা</span> Bengali</div>
+      <div class="lang-chip"><span class="lscript">म</span> Marathi</div>
+      <div class="lang-chip"><span class="lscript">ગ</span> Gujarati</div>
+      <div class="lang-chip"><span class="lscript">En</span> English (IN)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Use cases ── -->
+<section class="usecases-bg" id="usecases">
+  <div class="usecases-inner fade-up">
+    <div class="section-label center">Real Situations</div>
+    <h2 class="center">The moments that matter.</h2>
+    <div class="uc-grid">
+      <div class="uc-card">
+        <div class="uc-icon">🛒</div>
+        <div>
+          <div class="uc-title">Shopping alone</div>
+          <div class="uc-text">Point at a product on a shelf. Drishti reads the label, tells you what it is, and compares prices across platforms so you can shop independently.</div>
+          <div class="uc-quote">"What does this packet say?" → "Parle-G biscuits, 200g, ₹20"</div>
+        </div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon">🚶</div>
+        <div>
+          <div class="uc-title">Walking safely</div>
+          <div class="uc-text">Navigation mode scans for obstacles in real-time and gives audio alerts before you encounter steps, barriers, or oncoming people.</div>
+          <div class="uc-quote">"Stop — there are two steps directly ahead"</div>
+        </div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon">💊</div>
+        <div>
+          <div class="uc-title">Reading medicine labels</div>
+          <div class="uc-text">Point at a medicine box or prescription. Drishti reads the drug name, dosage, and instructions aloud — helping avoid dangerous mistakes.</div>
+          <div class="uc-quote">"Paracetamol 500mg — take 1 tablet after meals"</div>
+        </div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon">📚</div>
+        <div>
+          <div class="uc-title">Studying & reading</div>
+          <div class="uc-text">Scan any notebook, textbook, or printed document. Drishti reads handwritten notes and printed text aloud — perfect for students.</div>
+          <div class="uc-quote">"Newton's second law: F = ma, force equals mass times acceleration"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Try Demo strip ── -->
+<section>
+  <div class="demo-strip fade-up">
+    <h3>Try it right now — no download needed.</h3>
+    <p>Works in any browser. Camera + voice. Free forever.</p>
+    <div class="demo-modes">
+      <div class="demo-mode">🔍 Describe Scene</div>
+      <div class="demo-mode">📄 Read Text</div>
+      <div class="demo-mode">👥 Describe People</div>
+      <div class="demo-mode">🗺️ Navigate</div>
+      <div class="demo-mode">💰 Price Lookup</div>
+    </div>
+    <a href="../drishti-web/index.html" target="_blank" class="btn-primary">Open Drishti →</a>
+  </div>
+</section>
+
+<!-- ── CTA / Waitlist ── -->
+<section class="cta-section" id="waitlist">
+  <div class="cta-inner fade-up">
+    <div class="section-label">Get Early Access</div>
+    <h2>Be the first to know<br/>when the app launches.</h2>
+    <p>We're building the Android app with always-on camera and mic. Sign up to get early access and help us shape the product.</p>
+    <form class="cta-form" onsubmit="handleWaitlist(event)">
+      <input class="cta-input" id="waitlistEmail" type="email" placeholder="Your email address" required />
+      <button type="submit" class="btn-primary">Join Waitlist</button>
+    </form>
+    <div class="cta-note" id="waitlistMsg">No spam. Unsubscribe anytime. · <a href="#">Privacy policy</a></div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-logo">Drishti <span>दृष्टि</span></div>
+  <div class="footer-links">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="../drishti-web/index.html" target="_blank">Try Demo</a>
+    <a href="mailto:hello@drishti.ai">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Drishti. Built with ❤️ for Bharat.</div>
+</footer>
+
+<script>
+// ── Waitlist ──
+function handleWaitlist(e) {
+  e.preventDefault();
+  const email = document.getElementById('waitlistEmail').value;
+  // In production: POST to backend / Google Form / Airtable
+  document.getElementById('waitlistMsg').textContent = `✓ You're on the list! We'll email ${email} when we launch.`;
+  document.getElementById('waitlistMsg').style.color = '#22c55e';
+  document.getElementById('waitlistEmail').value = '';
+}
+
+// ── Scroll animations ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

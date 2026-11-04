@@ -1,0 +1,11 @@
+.venv/
+.hub/
+keys.env
+__pycache__/
+*.pyc
+.pytest_cache/
+modules/mavis/exports/
+modules/mavis/prototype/models/
+modules/mavis/tests/exports/
+modules/gesture/config/calibration_samples.json
+offline-cache/

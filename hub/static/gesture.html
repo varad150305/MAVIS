@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gesture control · MAVIS</title>
+<meta name="theme-color" content="#0E0D0B">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0E0D0B; --panel: #181612; --panel-2: #221F19; --ink: #F6F1E7; --muted: #A9A08F; --line: #2E2A22;
+  --accent: #FF7A63; --ok: #4ADE80; --hold: #FBBF24; --bad: #F87171; --info: #7DD3FC;
+  --display: 'Fredoka', system-ui, sans-serif; --body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.45 var(--body); -webkit-font-smoothing: antialiased; overflow: hidden; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+.app { display: grid; grid-template-rows: auto 1fr; height: 100dvh; height: 100vh; }
+@supports (height: 100dvh) { .app { height: 100dvh; } }
+
+/* top bar */
+.bar { display: flex; align-items: center; gap: 8px; padding: 10px 12px; padding-top: max(10px, env(safe-area-inset-top)); border-bottom: 1px solid var(--line); background: var(--bg); }
+.bar .title { font: 600 19px/1 var(--display); margin-right: auto; display: flex; align-items: center; gap: 8px; }
+.bar .title i { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); display: inline-block; }
+.bar .title i.live { background: var(--ok); box-shadow: 0 0 0 4px rgba(74,222,128,.18); }
+.ibtn { display: inline-flex; align-items: center; gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 8px 11px; cursor: pointer; font-size: 14px; text-decoration: none; }
+.ibtn svg { width: 18px; height: 18px; }
+.ibtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.ibtn .lbl { display: none; }
+@media (min-width: 720px) { .ibtn .lbl { display: inline; } }
+
+/* layout: camera + state */
+.main { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; }
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) { .main { grid-template-rows: none; grid-template-columns: minmax(0, 1fr) 400px; } }
+
+.stage { position: relative; min-height: 0; display: grid; place-items: center; background: #000; overflow: hidden; }
+.frame { position: relative; width: 100%; height: 100%; }
+.frame video, .frame canvas, .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.frame video.mirror { transform: scaleX(-1); }
+.frame img { display: none; background: #000; }
+.classic .frame video, .classic .frame canvas { visibility: hidden; }
+.classic .frame img { display: block; }
+
+/* HUD over the camera */
+.hud { position: absolute; left: 12px; right: 12px; top: 12px; display: flex; gap: 8px; align-items: flex-start; pointer-events: none; }
+.pill { display: inline-flex; align-items: center; gap: 10px; background: rgba(14,13,11,.78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255,255,255,.12); border-radius: 18px; padding: 8px 14px 8px 10px; max-width: 100%; }
+.pill .emo { font-size: 34px; line-height: 1; width: 40px; text-align: center; }
+.pill .gname { font: 600 22px/1.05 var(--display); }
+.pill .gsub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.pill.ok { border-color: var(--ok); } .pill.ok .gname { color: var(--ok); }
+.pill.hold { border-color: var(--hold); } .pill.hold .gname { color: var(--hold); }
+.pill { flex: 0 1 auto; min-width: 0; } .pill > div { min-width: 0; }
+.pill .gname { white-space: nowrap; }
+.hud .meta { margin-left: auto; font-size: 12px; color: var(--muted); background: rgba(14,13,11,.7); border-radius: 10px; padding: 5px 8px; white-space: nowrap; }
+.fingers { position: absolute; left: 12px; bottom: 12px; display: flex; gap: 6px; pointer-events: none; }
+.finger { width: 46px; background: rgba(14,13,11,.75); border-radius: 10px; padding: 5px 6px; font-size: 11px; text-align: center; color: var(--muted); }
+.finger b { display: block; height: 5px; border-radius: 3px; background: rgba(255,255,255,.12); margin-top: 4px; overflow: hidden; }
+.finger b i { display: block; height: 100%; background: var(--muted); }
+@media (max-width: 560px) {
+  .pill .emo { font-size: 28px; width: 32px; } .pill .gname { font-size: 19px; } .pill .gsub { font-size: 12px; }
+  .hud .meta .long { display: none; }
+  .fingers { gap: 4px; left: 8px; bottom: 8px; } .finger { width: 40px; font-size: 10px; padding: 4px; }
+}
+.finger.E b i { background: var(--ok); } .finger.F b i { background: #78716C; } .finger.T b i { background: #78716C; } .finger.Q b i { background: var(--hold); }
+
+/* start / error overlay */
+.cover { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; background: radial-gradient(ellipse at center, #1d1a15 0%, #0E0D0B 70%); z-index: 3; text-align: center; }
+.cover[hidden] { display: none; }
+.cover h1 { font: 600 clamp(26px, 5vw, 38px)/1.1 var(--display); margin: 12px 0 8px; }
+.cover p { color: var(--muted); max-width: 46ch; margin: 0 auto 18px; }
+.cover .hands { font-size: 40px; letter-spacing: 6px; }
+.cta { background: var(--accent); color: #1a0f0c; border: 0; font-weight: 700; font-size: 18px; padding: 15px 28px; border-radius: 99px; cursor: pointer; }
+.cta:disabled { opacity: .5; }
+.cover .err { color: var(--bad); font-weight: 600; max-width: 50ch; margin: 14px auto 0; }
+
+/* state panel */
+.side { background: var(--panel); border-top: 1px solid var(--line); overflow-y: auto; max-height: 46vh; padding: 14px 14px max(14px, env(safe-area-inset-bottom)); }
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) { .side { max-height: none; border-top: 0; border-left: 1px solid var(--line); padding: 18px; } }
+.card { background: var(--panel-2); border: 1.5px solid var(--line); border-radius: 20px; padding: 16px; }
+.kicker { font-size: 12px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); }
+.big { font: 600 30px/1.05 var(--display); margin: 6px 0 12px; }
+.tiles { display: grid; gap: 8px; }
+.tile { position: relative; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; background: var(--panel); border: 1.5px solid var(--line); overflow: hidden; }
+.tile .emo { font-size: 30px; width: 38px; text-align: center; }
+.tile b { font: 600 19px/1.1 var(--display); display: block; }
+.tile small { color: var(--muted); }
+.tile.holding { border-color: var(--hold); }
+.tile .prog, .bar-prog { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--hold); width: 0; transition: width .08s linear; }
+.state-confirm { border-color: var(--hold); }
+.state-confirm .big { color: var(--hold); }
+.state-active { border-color: var(--ok); }
+.state-active .big { color: var(--ok); }
+.step { position: relative; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; background: var(--panel); border: 1.5px solid var(--line); margin-top: 8px; overflow: hidden; }
+.step .emo { font-size: 28px; width: 36px; text-align: center; }
+.step.go { border-color: var(--ok); } .step.go .bar-prog { background: var(--ok); }
+.step.back .bar-prog { background: var(--bad); }
+.timer { height: 6px; border-radius: 3px; background: var(--panel); margin-top: 12px; overflow: hidden; }
+.timer i { display: block; height: 100%; background: var(--muted); transition: width .2s linear; }
+.open { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 12px; padding: 14px; border-radius: 14px; border: 0; background: var(--ok); color: #06240f; font-weight: 700; font-size: 17px; cursor: pointer; text-decoration: none; }
+.banner { margin-top: 10px; border-radius: 14px; padding: 12px 14px; font-weight: 700; background: #3b1d1d; color: #fecaca; display: none; }
+.banner.show { display: block; }
+.notice { color: var(--hold); font-size: 14px; min-height: 20px; margin-top: 10px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; font-size: 14px; color: var(--muted); }
+.switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.switch input { width: 40px; height: 22px; accent-color: var(--ok); }
+.log { margin-top: 14px; }
+.log h3 { font-size: 12px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.log ol { list-style: none; margin: 0; padding: 0; font-size: 14px; }
+.log li { display: flex; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); }
+.log time { color: var(--muted); font-variant-numeric: tabular-nums; flex: none; }
+.empty { color: var(--muted); font-size: 14px; }
+.countdown { position: fixed; inset: 0; z-index: 10; display: none; place-items: center; background: rgba(14,13,11,.86); text-align: center; padding: 20px; }
+.countdown.show { display: grid; }
+.countdown .big { font-size: 40px; }
+.countdown button { margin-top: 18px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 12px 22px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="bar">
+    <a class="ibtn" href="/" aria-label="Back to modes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lbl">Modes</span></a>
+    <div class="title"><i id="liveDot"></i>Gesture control</div>
+    <button class="ibtn" id="flipBtn" aria-label="Switch camera" title="Switch camera" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 13.5a2.5 2.5 0 014.6-1.4M14.5 12.5a2.5 2.5 0 01-4.6 1.4M14 10v2.2h-2.2M10 15.9v-2.2h2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="lbl">Flip</span></button>
+    <button class="ibtn" id="voiceBtn" aria-pressed="true" title="Spoken feedback"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9z" fill="currentColor"/><path d="M17 9a4 4 0 010 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="lbl">Voice</span></button>
+    <button class="ibtn" id="classicBtn" aria-pressed="false" title="Show the original gesture-controller window here"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M14 5v14" stroke="currentColor" stroke-width="1.8"/></svg><span class="lbl">Classic view</span></button>
+  </header>
+
+  <div class="main">
+    <section class="stage" id="stage" aria-label="Camera">
+      <div class="frame" id="frame">
+        <video id="video" playsinline muted autoplay></video>
+        <canvas id="overlay" aria-hidden="true"></canvas>
+        <img id="classicImg" alt="Original gesture controller view">
+      </div>
+      <div class="hud">
+        <div class="pill" id="pill"><span class="emo" id="pillEmo">✋</span><div><div class="gname" id="pillName">No hand</div><div class="gsub" id="pillSub">Show one hand to the camera</div></div></div>
+        <div class="meta" id="meta"></div>
+      </div>
+      <div class="fingers" id="fingers" aria-hidden="true"></div>
+
+      <div class="cover" id="cover">
+        <div>
+          <div class="hands" aria-hidden="true">☝️ ✌️ 🤟 👍 🖐</div>
+          <h1>Control with your hand</h1>
+          <p>Hold a gesture for half a second. Everything you need to see appears on this screen.</p>
+          <button class="cta" id="startBtn">Start camera</button>
+          <div class="err" id="err" role="alert"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side" aria-live="polite">
+      <div class="card" id="stateCard"><div class="kicker">Getting ready</div><div class="big">Start the camera</div><p class="empty">Then hold up 1, 2 or 3 fingers to choose a feature.</p></div>
+      <div class="banner" id="banner"></div>
+      <div class="notice" id="notice"></div>
+      <div class="row"><label class="switch"><input type="checkbox" id="autoOpen"> Open the feature automatically</label></div>
+      <div class="log"><h3>What happened</h3><ol id="log"><li class="empty">Nothing yet.</li></ol></div>
+    </aside>
+  </div>
+</div>
+
+<div class="countdown" id="countdown" role="dialog" aria-modal="true" aria-labelledby="cdTitle">
+  <div><div class="kicker">Opening in <span id="cdNum">3</span></div><div class="big" id="cdTitle">OCR</div><p class="empty">Show 🖐 open palm or tap Cancel to stay here.</p><button id="cdCancel">Cancel</button></div>
+</div>
+<span class="sr-only" id="say" aria-live="assertive" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></span>
+<script src="/hub/static/gesture.js"></script>
+</body>
+</html>

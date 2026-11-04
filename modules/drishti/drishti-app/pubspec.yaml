@@ -1,0 +1,57 @@
+name: drishti
+description: AI eyes for the visually impaired — Drishti दृष्टि
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Camera
+  camera: ^0.10.5+9
+
+  # Permissions
+  permission_handler: ^11.3.1
+
+  # HTTP for Groq + Sarvam APIs
+  http: ^1.2.1
+
+  # Text to Speech (fallback when no Sarvam key)
+  flutter_tts: ^4.0.2
+
+  # Speech to Text (mic input) — 6.6.2 used the removed v1 plugin embedding
+  # (PluginRegistry.Registrar), which no longer compiles against current Flutter
+  speech_to_text: ^7.0.0
+
+  # Store API keys + settings
+  shared_preferences: ^2.2.3
+
+  # Location for SOS
+  geolocator: ^12.0.0
+
+  # SMS/call for SOS
+  url_launcher: ^6.3.0
+
+  # Play Sarvam audio (base64 wav)
+  audioplayers: ^6.0.0
+
+  # Image processing (resize before API)
+  image: ^4.2.0
+
+  # Temp directory for audio playback
+  path_provider: ^2.1.4
+
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/

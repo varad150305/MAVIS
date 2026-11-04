@@ -1,0 +1,7 @@
+# MAVIS gesture controller (mavis_gesture.py and the tests)
+# Python 3.12. mediapipe is pinned: 0.10.31+ removed the mp.solutions API used here.
+mediapipe==0.10.21
+# cv2 comes from opencv-contrib-python, which mediapipe already depends on;
+# do not add opencv-python as well (two packages providing cv2 conflict).
+opencv-contrib-python>=4.9
+numpy<2.0

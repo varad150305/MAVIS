@@ -1,0 +1,14 @@
+# MAVIS runtime dependencies (Python 3.11).  Direct requirements only; see requirements-lock.txt for the full pinned set.
+#
+# INSTALL WITH THE LOCK FILE:
+#     py -3.11 -m pip install --no-deps -r requirements-lock.txt
+# (--no-deps because rapidocr declares "opencv-python", which would install a SECOND OpenCV distribution on top of
+#  opencv-python-headless; two OpenCV distributions share one `cv2` folder and overwrite each other. See docs/SETUP.md.)
+
+aiohttp==3.13.3                  # web server (HTTP, server-sent events, MJPEG preview)
+numpy==1.26.4                    # opencv-python-headless 4.8.0.76 is built for numpy 1.x
+opencv-python-headless==4.8.0.76 # the ONLY OpenCV distribution: the product uses core OpenCV only (VideoCapture/FFmpeg, resize,
+                                 # imencode/imdecode, Laplacian, Farneback flow). No GUI window and no contrib module is used.
+wordfreq==3.1.1                  # text clean-up and legibility checks (also installs ftfy)
+rapidocr==3.9.2                  # LOCAL OCR, used only as the offline fallback (models are downloaded on first use)
+onnxruntime==1.23.2              # runtime for the local OCR models

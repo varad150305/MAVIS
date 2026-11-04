@@ -1,0 +1,6 @@
+# Legacy tray / desktop-control app (tray_app.py, main.py, settings_gui.py).
+# Not needed for the MAVIS gesture recognizer.
+-r requirements.txt
+pyautogui>=0.9.54
+pystray>=0.19
+pillow>=10.0

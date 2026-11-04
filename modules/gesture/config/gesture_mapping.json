@@ -1,0 +1,15 @@
+{
+  "selection_gestures": {
+    "one_finger":    {"feature": "ocr",              "label": "OCR",              "hint": "1 finger"},
+    "two_fingers":   {"feature": "translation",      "label": "Live Translation", "hint": "2 fingers"},
+    "three_fingers": {"feature": "price_comparison", "label": "Price Comparison", "hint": "3 fingers"}
+  },
+  "confirm_gesture": "thumbs_up",
+  "back_gesture": "open_palm",
+  "timings": {
+    "selection_hold_sec": 0.5,
+    "confirm_hold_sec": 0.5,
+    "back_hold_sec": 0.5,
+    "confirmation_timeout_sec": 8.0
+  }
+}
