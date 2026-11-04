@@ -42,6 +42,24 @@ def host_config(data_dir: Path) -> str:
     return str(out)
 
 
+def pick_microphone():
+    """MAVIS_TRANSLATION_MIC (e.g. "DroidCam"): first input device whose name contains it and accepts her format
+    (16 kHz mono). Windows lists one microphone once per audio API, so a bare name would be ambiguous.
+    Unset/empty -> None = her default (the system default input)."""
+    want = (os.environ.get("MAVIS_TRANSLATION_MIC") or "").strip()
+    if not want:
+        return None, "system default microphone"
+    import sounddevice as sd
+    for idx, info in enumerate(sd.query_devices()):
+        if info["max_input_channels"] > 0 and want.lower() in info["name"].lower():
+            try:
+                sd.check_input_settings(device=idx, samplerate=16000, channels=1, dtype="float32")
+                return idx, info["name"]
+            except Exception:  # noqa: BLE001
+                continue
+    return None, f"no input device matching {want!r}; using the system default microphone"
+
+
 def main():
     data_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.cwd() / "runtime_data"
     config = host_config(data_dir)
@@ -54,8 +72,10 @@ def main():
                 emit({"type": "bridge", "state": "busy"})
                 continue
             try:
+                device, mic = pick_microphone()
+                emit({"type": "bridge", "state": "microphone", "device": device, "name": mic})
                 session = create_host_session(
-                    SessionOptions(config=config, session_name="mavis"), on_event=lambda e: emit(e))
+                    SessionOptions(config=config, session_name="mavis", device=device), on_event=lambda e: emit(e))
                 session.start()
                 emit({"type": "bridge", "state": "started", "session_id": session.session_id})
             except Exception as exc:  # noqa: BLE001

@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import io
+import re
 import os
 import socket
 import sys
@@ -157,6 +158,8 @@ class Hub:
             html = (DRISHTI_WEB / "index.html").read_text(encoding="utf-8")
             # Drishti's internet addresses (models, libraries, fonts) -> this computer's offline mirror
             html = offline.rewrite(html, offline.origin_of(request))
+            # phone camera/microphone (DroidCam) preference, loaded before any of Drishti's own scripts
+            html = re.sub(r"(<head[^>]*>)", r'\1<script src="/hub/static/device-pref.js"></script>', html, count=1)
             html = html.replace("</body>", '<link rel="stylesheet" href="/hub/static/addons.css">\n'
                                            '<script src="/hub/static/drishti-addon.js"></script>\n</body>', 1)
             return web.Response(text=html, content_type="text/html", headers={**NO_STORE, **DRISHTI_HEADERS})

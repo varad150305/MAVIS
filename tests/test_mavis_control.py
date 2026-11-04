@@ -59,6 +59,7 @@ FAKE_SESSION = textwrap.dedent('''
     class SessionOptions:
         config: str = None
         session_name: str = None
+        device: object = None
         overrides: list = field(default_factory=list)
     def feature_enabled(path):
         import yaml

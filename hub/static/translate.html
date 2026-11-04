@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="/hub/static/device-pref.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Live Translation · MAVIS</title>
@@ -98,6 +99,7 @@ function showErr(t) { $('#err').hidden = !t; $('#err').textContent = t || ''; }
 
 function handle(e) {
   if (e.type === 'bridge') {
+    if (e.state === 'microphone') $('#hint').textContent = "Yogita's translation module · microphone: " + e.name;
     if (e.state === 'error') { setState('error', 'Could not start'); showErr(e.error); }
     if (e.state === 'exited' && state !== 'off') setState('off', 'Stopped');
     return;
