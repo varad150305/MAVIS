@@ -1,0 +1,2 @@
+# Yogita's package: keep bytes exactly as delivered (some files are SHA-pinned with Windows line endings)
+modules/translation/** -text
