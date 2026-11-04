@@ -1,7 +1,7 @@
 /* MAVIS camera/microphone rule, loaded first on every MAVIS page (the modules' own code is unchanged):
-     - OCR + LLM pages (/mavis/...): use the phone's DroidCam stream ("DroidCam Source" camera) when present.
-     - every other page (gesture control, live translation, Drishti, launcher): use the laptop's own camera and
-       microphone, i.e. never the DroidCam devices when another device exists.
+   every page uses the laptop's own camera and microphone - never the virtual "DroidCam" devices that the DroidCam
+   Windows client adds, when another device exists. (The OCR + LLM module streams from the DroidCam phone app over
+   Wi-Fi through its own "Connect and start scanning" form, which needs no Windows client.)
    Applies only when a page asks without naming a device; a page that names a device (the OCR page's
    "Use the laptop camera" button) gets exactly that device. If the chosen device fails, the browser default is used. */
 (function () {
@@ -11,7 +11,7 @@
   md.__mavisPref = true;
   const orig = md.getUserMedia.bind(md);
   const RE = /droidcam/i;
-  const PREFER_PHONE = /^\/mavis(\/|$)/.test(location.pathname);
+  const PREFER_PHONE = false;
   window.MAVIS_DEVICE_RULE = PREFER_PHONE ? 'phone (DroidCam)' : 'laptop';
 
   async function pick(kind) {

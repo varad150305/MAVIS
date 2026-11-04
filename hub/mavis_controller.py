@@ -18,7 +18,7 @@ from __future__ import annotations
 READY_SECONDS = 8.0
 
 MODULES = {
-    "one_finger": {"id": "ocr", "label": "OCR + LLM", "url": "/mavis/?autostart=1"},
+    "one_finger": {"id": "ocr", "label": "OCR + LLM", "url": "/mavis/"},
     "two_fingers": {"id": "translation", "label": "Live Translation", "url": "/translate/?autostart=1"},
     "three_fingers": {"id": "drishti", "label": "Drishti", "url": "/drishti/?mode=describe&autostart=1"},
 }
