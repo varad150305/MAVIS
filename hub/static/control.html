@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gesture Control · MAVIS</title>
+<style>
+:root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --ink:#f3f4f6; --muted:#9ca3af; --ocr:#6366f1; --tr:#a78bfa; --dr:#14b8a6; --ready:#f59e0b; --ok:#22c55e; }
+* { box-sizing:border-box; }
+html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:16px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; overflow:hidden; }
+#frame { position:fixed; inset:0; width:100%; height:100%; border:0; background:#fff; display:none; }
+.home { position:fixed; inset:0; display:grid; place-items:center; padding:24px; }
+.home .inner { max-width:1000px; width:100%; }
+.home h1 { font-size:clamp(28px, 4vw, 44px); margin:0 0 6px; }
+.home p.sub { color:var(--muted); margin:0 0 26px; font-size:18px; }
+.steps { display:grid; gap:14px; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); }
+.step { background:var(--panel); border:1.5px solid var(--line); border-radius:18px; padding:18px; }
+.step .g { font-size:40px; } .step b { display:block; font-size:19px; margin:6px 0 2px; } .step span { color:var(--muted); font-size:14px; }
+.step.on { border-color:var(--c, var(--ready)); box-shadow:0 0 0 3px color-mix(in srgb, var(--c, var(--ready)) 35%, transparent); }
+.step.ocr { --c:var(--ocr); } .step.tr { --c:var(--tr); } .step.dr { --c:var(--dr); }
+.big { margin-top:24px; font-size:22px; font-weight:700; min-height:32px; }
+.big.ready { color:var(--ready); }
+.startcam { margin-top:18px; font:700 17px inherit; font-family:inherit; border:0; border-radius:14px; padding:13px 22px; background:var(--ready); color:#111; cursor:pointer; }
+.box { position:fixed; right:16px; bottom:16px; width:260px; background:rgba(15,17,21,.92); border:1.5px solid var(--line); border-radius:16px; overflow:hidden; z-index:10; box-shadow:0 10px 30px rgba(0,0,0,.45); }
+.box .vid { position:relative; aspect-ratio:4/3; background:#000; }
+.box video, .box canvas { position:absolute; inset:0; width:100%; height:100%; transform:scaleX(-1); object-fit:cover; }
+.box .bar { padding:8px 10px; font-size:13px; display:flex; flex-direction:column; gap:3px; }
+.box .mod { font-weight:700; font-size:14px; }
+.box .g { color:var(--muted); }
+.ring { position:absolute; top:8px; right:8px; width:34px; height:34px; border-radius:50%; background:conic-gradient(var(--ready) calc(var(--p,0)*1turn), rgba(255,255,255,.15) 0); transform:scaleX(-1); }
+.toast { position:fixed; left:50%; top:76px; transform:translateX(-50%); background:rgba(15,17,21,.94); color:#fff; border:1px solid var(--line); padding:10px 18px; border-radius:12px; font-weight:700; z-index:11; display:none; font-size:17px; }
+.back { position:fixed; left:14px; top:14px; color:var(--muted); text-decoration:none; font-weight:600; z-index:5; }
+.box.min .vid { display:none; }
+</style>
+</head>
+<body>
+<iframe id="frame" title="Active MAVIS module" allow="camera; microphone; autoplay; clipboard-write"></iframe>
+<a class="back" id="back" href="/">‹ MAVIS</a>
+<div class="home" id="home">
+  <div class="inner">
+    <h1>Gesture control</h1>
+    <p class="sub">Your hand chooses the module. Everything opens on this screen.</p>
+    <div class="steps">
+      <div class="step" id="s-ready"><div class="g">👍</div><b>Ready</b><span>Thumbs up, then choose within 8 s</span></div>
+      <div class="step ocr" id="s-one_finger"><div class="g">☝️</div><b>OCR + LLM</b><span>1 finger · Varad's document reader</span></div>
+      <div class="step tr" id="s-two_fingers"><div class="g">✌️</div><b>Live Translation</b><span>2 fingers · Yogita's English → Hindi</span></div>
+      <div class="step dr" id="s-three_fingers"><div class="g">🤟</div><b>Drishti</b><span>3 fingers · Harsh's scene assistant</span></div>
+      <div class="step" id="s-off"><div class="g">🖐</div><b>Turn off</b><span>Open palm stops the module</span></div>
+    </div>
+    <div class="big" id="big">Start the camera to begin.</div>
+    <button class="startcam" id="startBtn">Start camera</button>
+  </div>
+</div>
+<div class="box" id="box" hidden>
+  <div class="vid"><video id="cam" autoplay playsinline muted></video><canvas id="cv"></canvas><div class="ring" id="ring"></div></div>
+  <div class="bar"><span class="mod" id="mod">Idle</span><span class="g" id="gst">No hand</span></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+'use strict';
+const $ = (s) => document.querySelector(s);
+const EMOJI = { one_finger: '☝️', two_fingers: '✌️', three_fingers: '🤟', thumbs_up: '👍', open_palm: '🖐' };
+const MEANS = { thumbs_up: 'Ready', one_finger: 'OCR + LLM', two_fingers: 'Live Translation', three_fingers: 'Drishti', open_palm: 'Turn off' };
+const BONES = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+let ws, video, busy = false, active = null, toastT;
+const cap = document.createElement('canvas'); cap.width = 640; cap.height = 480;
+const speak = (t) => { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(t)); } catch (e) {} };
+function toast(t) { const el = $('#toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toastT); toastT = setTimeout(() => el.style.display = 'none', 2600); }
+
+function openModule(m) {
+  active = m;
+  $('#frame').src = m.url; $('#frame').style.display = 'block'; $('#home').style.display = 'none'; $('#back').style.display = 'none';
+  $('#box').classList.remove('min');
+}
+function closeModule() {
+  active = null;
+  $('#frame').src = 'about:blank'; $('#frame').style.display = 'none'; $('#home').style.display = 'grid'; $('#back').style.display = '';
+}
+function onFrame(p) {
+  const m = p.mavis || {};
+  (p.mavis_events || []).forEach((e) => {
+    if (e.event === 'ready') { toast('👍 Ready — show 1, 2 or 3 fingers'); speak('Ready. Show one, two or three fingers.'); }
+    if (e.event === 'module_on') { toast(`Starting ${e.module.label}`); speak(`Starting ${e.module.label}`); openModule(e.module); }
+    if (e.event === 'module_off') { toast(`🖐 ${e.module.label} turned off`); speak(`${e.module.label} turned off`); closeModule(); }
+    if (e.event === 'ready_timeout' || e.event === 'ready_cancelled') toast(e.event === 'ready_timeout' ? 'Ready timed out' : 'Cancelled');
+  });
+  // home screen highlights
+  document.querySelectorAll('.step').forEach((el) => el.classList.remove('on'));
+  if (m.state === 'ready') { $('#s-ready').classList.add('on'); $('#big').className = 'big ready'; $('#big').textContent = `Ready — choose within ${Math.ceil(m.ready_left || 0)} s`; }
+  else if (m.state === 'idle') { $('#big').className = 'big'; $('#big').textContent = 'Show 👍 thumbs up to start.'; }
+  $('#mod').textContent = m.state === 'active' ? `● ${m.module.label} on — 🖐 to turn off` : m.state === 'ready' ? `Ready (${Math.ceil(m.ready_left || 0)} s) — show 1, 2 or 3` : 'Idle — 👍 to start';
+  $('#mod').style.color = m.state === 'active' ? 'var(--ok)' : m.state === 'ready' ? 'var(--ready)' : '';
+  const r = p.recognition, st = p.stability || {};
+  $('#gst').textContent = !r || r.no_hand ? 'No hand' : r.is_gesture ? `${EMOJI[r.gesture] || ''} ${MEANS[r.gesture] || r.gesture}` : 'Hand seen';
+  $('#ring').style.setProperty('--p', st.candidate ? st.progress : 0);
+  if (st.candidate && $('#s-' + st.candidate)) $('#s-' + st.candidate).classList.add('on');
+  draw(p.hand);
+}
+function draw(hand) {
+  const c = $('#cv'), x = c.getContext('2d'); c.width = c.clientWidth * 2; c.height = c.clientHeight * 2;
+  x.clearRect(0, 0, c.width, c.height);
+  if (!hand) return;
+  // the hub works on the mirrored (selfie) frame; the canvas is mirrored by CSS like the video, so un-mirror x here
+  const P = hand.points.map(([px, py]) => [(1 - px) * c.width, py * c.height]);
+  x.strokeStyle = '#f59e0b'; x.lineWidth = 4; x.beginPath();
+  BONES.forEach(([a, b]) => { x.moveTo(...P[a]); x.lineTo(...P[b]); }); x.stroke();
+  x.fillStyle = '#fff'; P.forEach(([a, b]) => { x.beginPath(); x.arc(a, b, 4, 0, 7); x.fill(); });
+}
+function send() {
+  if (!ws || ws.readyState !== 1 || busy || !video.videoWidth) return;
+  busy = true;
+  cap.getContext('2d').drawImage(video, 0, 0, 640, 480);
+  cap.toBlob((b) => { if (b && ws.readyState === 1) ws.send(b); else busy = false; }, 'image/jpeg', 0.7);
+}
+function connect() {
+  ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/hub/gesture/ws');
+  ws.binaryType = 'arraybuffer';
+  ws.onmessage = (m) => {
+    if (typeof m.data !== 'string') return;
+    const p = JSON.parse(m.data);
+    if (p.type === 'frame') { busy = false; onFrame(p); }
+    else if (p.type === 'error') { busy = false; toast(p.message); }
+  };
+  ws.onclose = () => { busy = false; setTimeout(connect, 1500); };
+}
+$('#startBtn').onclick = async () => {
+  try {
+    const s = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: false });
+    video = $('#cam'); video.srcObject = s; await video.play();
+    $('#startBtn').style.display = 'none'; $('#box').hidden = false; $('#big').textContent = 'Show 👍 thumbs up to start.';
+    connect(); setInterval(send, 66);
+  } catch (e) { $('#big').textContent = 'Camera not available: ' + e.message; }
+};
+$('#box').ondblclick = () => $('#box').classList.toggle('min');
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{
+ "title": "MT3-C frozen parameters (written before any MT3-C result exists)",
+ "created_utc": "2026-10-07T13:34:42Z",
+ "created_by": "python -m evaluation.mt3c_prep --stage freeze",
+ "mt3c_results_consulted": false,
+ "parameters": {
+  "K_base": 8,
+  "K_max": 24,
+  "T_max_s": 2.0,
+  "T_max_sensitivity_s": 4.0,
+  "W_R_s": 4.0,
+  "rho": 0.5,
+  "cost_model": {
+   "form": "C_hat(W) = a + b*W seconds; W = stable source words (whitespace split)",
+   "a_s": 0.0629132204997214,
+   "b_s_per_word": 0.028117205020604597,
+   "r2": 0.6165037298610616,
+   "n": 520,
+   "source": "evaluation\\mt3c_prep\\cost_model.json",
+   "source_sha256": "6ce487c0c1ba5777848c543a119d528b5d2d6914164d9ac03e027d5f23597a4b",
+   "fit_rule": "OLS of per-sentence best-of-2 inference time (s) on source word count (whitespace split, as the scheduler counts stable words); all 520 dev sentences; best-of-repeats is MT-1's pre-declared steady-state latency estimator. Fit fixed before inspection; outlier-excluded fit is a diagnostic only."
+  },
+  "finalization_convention_primary": "F2: max(last stable-update time, sample audio end)",
+  "finalization_convention_continuity": "F1: last stable-update time (frozen MT3-A/B convention)",
+  "same_time_event_order": [
+   "update",
+   "deadline",
+   "finalization"
+  ]
+ },
+ "rules": {
+  "K_base": "Reuses the frozen MT3-B K selection (evaluation/mt3_canonical/k_selection.json): candidate in {8,16,24} closest to the canonical-input median newly stabilized words per update (6). Input statistics only.",
+  "K_max": "Largest pre-registered MT3-B candidate (24); above the canonical-input p99 update size.",
+  "T_max_s": "Pre-declared system-design choice of about one typical update interval (canonical-input median gap between updates with new words, rounded up to 0.5 s). A design choice, not an optimum.",
+  "T_max_sensitivity_s": "Pre-declared robustness condition at the observed high-percentile update-gap scale (p95 gap, rounded). Reported only; never used to select T_max.",
+  "W_R_s": "Recent arrival-rate window covering about one high-percentile (p95) update interval.",
+  "rho": "Explicit system-design computation budget: approximate upper bound on the expected MT duty cycle used in the adaptive threshold (K >= R*C_hat/rho). Not derived from any MT3-C outcome. (The audit's input-derived 1 - ASR duty cycle = 0.565 was NOT adopted; 0.5 chosen as a round design budget.)",
+  "cost_model": "Linear in stable source words, fit on the AC re-benchmark of the 520-sentence MT-1 dev split only; the older MT-1 dev fit and all canonical MT3-A/B invocation timings are NOT used."
+ },
+ "forbidden_inputs": [
+  "any MT3-C result",
+  "BLEU/chrF on the canonical set",
+  "MT3-A/B canonical delay, compute or invocation timings",
+  "measured MT runtime at decision time",
+  "OS CPU utilization",
+  "target-side translation stability",
+  "MT worker busy state"
+ ],
+ "input_distribution_documentation": {
+  "updates_with_new_words": 801,
+  "update_size_median": 6.0,
+  "update_size_p95": 16.0,
+  "update_size_p99": 22.0,
+  "update_gap_s_median": 1.9120823499979451,
+  "update_gap_s_p95": 4.00929390003148,
+  "update_gap_count": 536
+ },
+ "provenance": {
+  "model": "Helsinki-NLP/opus-mt-en-hi",
+  "revision": "75d7f7c9232b2891c7d65fe4ef635616c72be867",
+  "mt_yaml_sha256": "25d0e3c0219c62b372259f664357e18f4c15343aaced3e898cfb0251fb1711fd",
+  "mt1_frozen_config_sha256": "fe4536a8ad02640b9691a731ce1721ca17f6901b3237995cad4a6b8f8779d477",
+  "torch_threads": 8,
+  "num_beams": 1,
+  "dev_source": {
+   "path": "test_for_translation\\dev_test\\dev.en",
+   "bytes": 55133,
+   "sha256": "792185b861e0ef135554a399d1ec36faabce21aa2fdf45e4490c83db71d0bf68",
+   "utf8_valid": true,
+   "bom": false,
+   "contains_cr": false,
+   "trailing_newline": true,
+   "line_count": 520
+  },
+  "canonical_stream_sha256": "fdfff189a5b18a5da07d1e171ca20f791916b368b8c7451f5a70c21d24cf2ddc",
+  "k_selection_sha256": "27f7320c1cb1d86fd9bd2c3d021d81e71d1d6792350b9254b5343f5c53564fa9",
+  "cost_benchmark_environment": {
+   "python": "3.10.11",
+   "python_executable": "C:\\Users\\Yogita Aher\\OneDrive\\Desktop\\live_translation_final\\.venv\\Scripts\\python.exe",
+   "python_machine": "AMD64",
+   "platform": "Windows-10-10.0.26200-SP0",
+   "cpu_name": "Snapdragon(R) X - X126100 - Qualcomm(R) Oryon(TM) CPU",
+   "logical_cpus": 8,
+   "note": "python_machine AMD64 on an ARM64 CPU means x64 emulation (Windows on ARM); all timings include emulation overhead.",
+   "torch_threads": 8,
+   "torch_threads_requested": 8,
+   "torch_interop_threads": 8,
+   "hf_offline": "1",
+   "package_versions": {
+    "torch": "2.7.1",
+    "transformers": "4.52.4",
+    "tokenizers": "0.21.4",
+    "sentencepiece": "0.2.0",
+    "sacremoses": "0.2.0",
+    "sacrebleu": "2.6.0",
+    "numpy": "2.2.6"
+   }
+  }
+ }
+}

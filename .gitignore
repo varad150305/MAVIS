@@ -9,3 +9,7 @@ modules/mavis/prototype/models/
 modules/mavis/tests/exports/
 modules/gesture/config/calibration_samples.json
 offline-cache/
+modules/translation/.venv/
+modules/translation/models/
+modules/translation/runtime_data/sessions/*
+!modules/translation/runtime_data/sessions/.gitkeep

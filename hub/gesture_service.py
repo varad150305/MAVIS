@@ -37,6 +37,8 @@ from hand_geometry import FINGER_NAMES  # noqa: E402
 from mavis_gesture import (GesturePipeline, draw_recognition, draw_state_panel,  # noqa: E402
                            load_settings)
 
+from .mavis_controller import ModuleController  # noqa: E402
+
 MAX_FRAME_BYTES = 2_000_000
 
 
@@ -51,6 +53,7 @@ class GestureSession:
         self.fps = 0.0
         self._last = None
         self.counts = {"frames": 0, "events": 0}
+        self.modules = ModuleController()      # MAVIS flow: thumbs up -> 1/2/3 fingers -> open palm
 
     # ---- one frame
     def process(self, jpeg: bytes, classic: bool):
@@ -69,6 +72,8 @@ class GestureSession:
         self.counts["frames"] += 1
         self.counts["events"] += len(r.events)
         payload = self.describe(r, dets, now, frame.shape)
+        payload["mavis_events"] = self.modules.update(r.gesture_event, now)
+        payload["mavis"] = self.modules.describe(now)
         image = None
         if classic:
             view = frame.copy()

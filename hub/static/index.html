@@ -18,42 +18,51 @@
   </header>
 
   <section class="hero">
-    <h1>See it, read it, control it.</h1>
-    <p>Three modes, each a complete tool of its own. Pick one, or open this page on your phone and use its camera. All three work without internet.</p>
+    <h1>Show your hand. MAVIS does the rest.</h1>
+    <p>Gesture recognition is the controller: 👍 for ready, then ☝️ OCR + LLM, ✌️ Live Translation or 🤟 Drishti. 🖐 turns the module off. Each module also opens on its own below.</p>
+    <p><a class="cta" href="/control/">Start gesture control →</a> <a class="cta2" href="/gesture/">Gesture recogniser (detailed view)</a></p>
   </section>
 
   <nav class="modes" aria-label="Modes">
-    <a class="mode drishti" href="/drishti/" data-key="1">
+    <a class="mode gesture" href="/control/" data-key="g">
       <div class="mode-top">
-        <span class="mode-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 16c4-6.5 8.2-10 13-10s9 3.5 13 10c-4 6.5-8.2 10-13 10S7 22.5 3 16z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><circle cx="16" cy="16" r="5" fill="currentColor"/></svg></span>
-        <span class="key" aria-hidden="true">1</span>
+        <span class="mode-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 17V7.5a2 2 0 014 0V15M15 14V5.5a2 2 0 014 0V15M19 14.5V7a2 2 0 014 0v11c0 5.5-3.6 9-8.5 9-3.4 0-5.6-1.6-7.4-4.6L4.8 18.6a2 2 0 013.3-2.2L11 20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="key" aria-hidden="true">G</span>
       </div>
-      <div><div class="tag">Mode 1 · Scene assistant</div><h2>Drishti</h2></div>
-      <p>Point the camera at anything. Hear what is in front of you, read signs, recognise money and spot hazards, in Indian languages.</p>
-      <ul class="chips"><li>Describe</li><li>Read text</li><li>Currency</li><li>Prices</li><li>Translate</li><li>Voice</li></ul>
-      <div class="mode-foot"><span class="status-stack"><span class="status" id="st-drishti"><span class="dot"></span>Checking…</span><span class="status off" id="off-drishti"></span></span><span class="go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      <div><div class="tag">Controller · Yogita</div><h2>Gesture control</h2></div>
+      <p>Your hand chooses the module: thumbs up for ready, then 1, 2 or 3 fingers. Open palm turns it off.</p>
+      <ul class="chips"><li>👍 Ready</li><li>☝️ OCR</li><li>✌️ Translate</li><li>🤟 Drishti</li><li>🖐 Off</li></ul>
+      <div class="mode-foot"><span class="status-stack"><span class="status" id="st-gesture"><span class="dot"></span>Checking…</span><span class="status off" id="off-gesture"></span></span><span class="go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
     </a>
-
-    <a class="mode mavis" href="/mavis/" data-key="2">
+    <a class="mode mavis" href="/mavis/" data-key="1">
       <div class="mode-top">
         <span class="mode-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 10V5h5M27 10V5h-5M5 22v5h5M27 22v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 12h12M10 16h12M10 20h8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>
-        <span class="key" aria-hidden="true">2</span>
+        <span class="key" aria-hidden="true">1</span>
       </div>
-      <div><div class="tag">Mode 2 · Documents</div><h2>OCR</h2></div>
+      <div><div class="tag">☝️ 1 finger · Documents · Varad</div><h2>OCR + LLM</h2></div>
       <p>Scan printed pages with a camera. MAVIS reads every page, then answers your questions and shows which page each answer came from.</p>
       <ul class="chips"><li>Scan pages</li><li>OCR</li><li>Ask questions</li><li>Summaries</li><li>Export</li></ul>
       <div class="mode-foot"><span class="status-stack"><span class="status" id="st-mavis"><span class="dot"></span>Checking…</span><span class="status off" id="off-mavis"></span></span><span class="go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
     </a>
-
-    <a class="mode gesture" href="/gesture/" data-key="3">
+    <a class="mode translation" href="/translate/" data-key="2">
       <div class="mode-top">
-        <span class="mode-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 17V7.5a2 2 0 014 0V15M15 14V5.5a2 2 0 014 0V15M19 14.5V7a2 2 0 014 0v11c0 5.5-3.6 9-8.5 9-3.4 0-5.6-1.6-7.4-4.6L4.8 18.6a2 2 0 013.3-2.2L11 20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="mode-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 7h12M11 4v3M8 7c1 5 4 8 8 10M14 7c-1 5-4 9-9 11" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 27l5-12 5 12M19 23h6" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="key" aria-hidden="true">2</span>
+      </div>
+      <div><div class="tag">✌️ 2 fingers · Speech · Yogita</div><h2>Live Translation</h2></div>
+      <p>Speak English and read it in Hindi, live: a quick draft first, then the final translation, as subtitles over the camera.</p>
+      <ul class="chips"><li>English → हिन्दी</li><li>Live subtitles</li><li>Draft → final</li><li>On this computer</li></ul>
+      <div class="mode-foot"><span class="status-stack"><span class="status" id="st-translation"><span class="dot"></span>Checking…</span><span class="status off" id="off-translation"></span></span><span class="go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    </a>
+    <a class="mode drishti" href="/drishti/" data-key="3">
+      <div class="mode-top">
+        <span class="mode-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 16c4-6.5 8.2-10 13-10s9 3.5 13 10c-4 6.5-8.2 10-13 10S7 22.5 3 16z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><circle cx="16" cy="16" r="5" fill="currentColor"/></svg></span>
         <span class="key" aria-hidden="true">3</span>
       </div>
-      <div><div class="tag">Mode 3 · Hands-free</div><h2>Gesture</h2></div>
-      <p>Choose a feature with your hand. The camera, the hand skeleton and every result appear on the screen you are holding.</p>
-      <ul class="chips"><li>☝️ OCR</li><li>✌️ Translate</li><li>🤟 Prices</li><li>👍 Confirm</li><li>🖐 Back</li></ul>
-      <div class="mode-foot"><span class="status-stack"><span class="status" id="st-gesture"><span class="dot"></span>Checking…</span><span class="status off" id="off-gesture"></span></span><span class="go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      <div><div class="tag">🤟 3 fingers · Scene assistant · Harsh</div><h2>Drishti</h2></div>
+      <p>Point the camera at anything. Hear what is in front of you, recognise money, compare prices and spot hazards, with voice in Indian languages.</p>
+      <ul class="chips"><li>Describe</li><li>Currency</li><li>Navigate</li><li>Prices</li><li>Safety</li><li>Voice</li></ul>
+      <div class="mode-foot"><span class="status-stack"><span class="status" id="st-drishti"><span class="dot"></span>Checking…</span><span class="status off" id="off-drishti"></span></span><span class="go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
     </a>
   </nav>
 
@@ -74,13 +83,14 @@
     </section>
     <section class="panel">
       <h3>How the modes work together</h3>
-      <p>In Gesture mode, a confirmed feature opens its mode:</p>
-      <div class="flow"><span>☝️ OCR → OCR mode</span><span>✌️ Translation → Drishti</span><span>🤟 Price comparison → Drishti</span></div>
+      <p>Gesture control switches between the modules:</p>
+      <div class="flow"><span>👍 Ready</span><span>☝️ OCR + LLM (Varad)</span><span>✌️ Live Translation (Yogita)</span><span>🤟 Drishti (Harsh)</span><span>🖐 Off</span></div>
+      <p>Documents are read only by the OCR + LLM module and speech is translated only by the Live Translation module; Drishti keeps everything else.</p>
       <p>In OCR mode, tap <b>Use this device's camera</b> to scan with the phone itself. No DroidCam app is needed.</p>
     </section>
   </div>
 
-  <p class="foot"><a href="/offline/">Offline readiness</a> · The three original projects are included unchanged in <code>modules/</code>. Keys 1, 2 and 3 open a mode.</p>
+  <p class="foot"><a href="/offline/">Offline readiness</a> · The three original projects are included unchanged in <code>modules/</code>. Keys G, 1, 2 and 3 open a mode.</p>
 </div>
 
 <script>
@@ -94,7 +104,7 @@ function setStatus(id, level, text) {
 async function refresh() {
   let s;
   try { s = await (await fetch('/hub/status', { cache: 'no-store' })).json(); }
-  catch (e) { ['drishti', 'mavis', 'gesture'].forEach((m) => setStatus(m, 'bad', 'Server not reachable')); return; }
+  catch (e) { ['drishti', 'mavis', 'translation', 'gesture'].forEach((m) => setStatus(m, 'bad', 'Server not reachable')); return; }
   const d = s.modes.drishti, m = s.modes.mavis, g = s.modes.gesture;
   if (!d.ok) setStatus('drishti', 'bad', 'Drishti files missing');
   else setStatus('drishti', 'ok', d.groq ? 'Ready' : 'Ready · add your Groq key inside the app');
@@ -106,6 +116,8 @@ async function refresh() {
     else if (l.status && l.status !== 'ok' && l.status !== 'ready') setStatus('mavis', 'warn', 'Scanning ready · Q&A needs Ollama');
     else setStatus('mavis', 'ok', r.remote === false ? 'Ready · pages read on this computer' : 'Ready');
   }
+  const t = s.modes.translation || {};
+  setStatus('translation', t.ok ? 'ok' : 'warn', t.ok ? 'Ready · uses this computer\'s microphone' : (t.message || 'Not installed'));
   setStatus('gesture', g.ok ? 'ok' : 'bad', g.ok ? (s.secure ? 'Ready' : 'Open over HTTPS to use the camera') : 'Unavailable: ' + (g.error || ''));
   if (s.this_computer && s.phone_links && s.phone_links.length) {
     $('#phonePanel').hidden = false;
@@ -119,12 +131,13 @@ async function refreshOffline() {
   set('drishti', o.drishti.ready, o.drishti.ready ? 'Offline: ready' : 'Offline: download models once');
   const mOk = o.mavis.local_ocr.ready && o.mavis.llm.status === 'ok';
   set('mavis', mOk, mOk ? 'Offline: ready' : 'Offline: one-time setup needed');
+  set('translation', true, 'Offline: always (models on this computer)');
   set('gesture', o.gesture.ready, o.gesture.ready ? 'Offline: always' : 'Offline: unavailable');
 }
 refresh(); setInterval(refresh, 8000); refreshOffline(); setInterval(refreshOffline, 15000);
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey || /input|textarea|select/i.test(e.target.tagName)) return;
-  const a = document.querySelector(`.mode[data-key="${e.key}"]`);
+  const a = document.querySelector(`.mode[data-key="${e.key.toLowerCase()}"]`);
   if (a) location.href = a.getAttribute('href');
 });
 </script>

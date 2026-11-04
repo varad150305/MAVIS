@@ -7,8 +7,8 @@
 const $ = (s) => document.querySelector(s);
 const EMOJI = { one_finger: '☝️', two_fingers: '✌️', three_fingers: '🤟', thumbs_up: '👍', open_palm: '🖐', UNKNOWN: '✋', NO_HAND: '✋' };
 const NAMES = { one_finger: 'One finger', two_fingers: 'Two fingers', three_fingers: 'Three fingers', thumbs_up: 'Thumbs up', open_palm: 'Open palm' };
-const OPEN = { ocr: '/mavis/', translation: '/drishti/?mode=translate', price_comparison: '/drishti/?mode=prices' };
-const OPEN_NAME = { ocr: 'OCR mode', translation: 'Drishti · Translate', price_comparison: 'Drishti · Prices' };
+const OPEN = { ocr: '/mavis/', translation: '/translate/?autostart=1', price_comparison: '/drishti/?mode=describe' };
+const OPEN_NAME = { ocr: 'OCR + LLM', translation: 'Live Translation', price_comparison: 'Drishti' };
 const BONES = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
 const SEND_W = 640, JPEG_Q = 0.7, MIN_GAP_MS = 40;
 

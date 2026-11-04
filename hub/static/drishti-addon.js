@@ -46,3 +46,43 @@
     say('all', 'done');
   }
 })();
+
+/* ---- MAVIS: Drishti without its OCR and translation modes ----------------------------------------------
+   In MAVIS, documents are read by Varad's OCR + LLM module and speech is translated by Yogita's live translation
+   module. Drishti keeps everything else. Its Read Text and Translate modes are hidden here (Drishti's files are not
+   changed), and any route into them (pill, voice command, ?mode=) points to the MAVIS module instead. */
+(function () {
+  'use strict';
+  const MOVED = {
+    text: { label: 'Read Text', to: 'OCR + LLM (Varad)', url: '/mavis/' },
+    translate: { label: 'Translate', to: 'Live Translation (Yogita)', url: '/translate/' },
+  };
+  const css = document.createElement('style');
+  css.textContent = '#pill-text, #pill-translate { display: none !important; }';
+  document.head.appendChild(css);
+  function notice(m) {
+    const info = MOVED[m];
+    let el = document.getElementById('mavis-moved');
+    if (!el) {
+      el = document.createElement('div'); el.id = 'mavis-moved';
+      el.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99999;background:#1b1f2a;color:#fff;padding:12px 18px;border-radius:12px;font:600 15px system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:92vw;text-align:center';
+      document.body.appendChild(el);
+    }
+    const inControl = window.top !== window;
+    el.innerHTML = `${info.label} is handled by <b>${info.to}</b> in MAVIS. ` +
+      (inControl ? 'Show 🖐 to turn Drishti off, then 👍 and the other gesture.' : `<a href="${info.url}" style="color:#5eead4">Open it</a>`);
+    clearTimeout(el._t); el._t = setTimeout(() => el.remove(), 6000);
+    try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(`${info.label} is handled by ${info.to.replace(/\(.*\)/, '')} in MAVIS.`)); } catch (e) { /* no voice */ }
+  }
+  function wrap(name) {
+    const orig = window[name];
+    if (typeof orig !== 'function') return;
+    window[name] = function (m, ...rest) {
+      if (MOVED[m]) { notice(m); return; }
+      return orig.call(this, m, ...rest);
+    };
+  }
+  function install() { wrap('setMode'); wrap('setModeVoice'); }
+  if (document.readyState === 'complete') install(); else window.addEventListener('load', install);
+  install();
+})();

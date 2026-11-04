@@ -1,0 +1,14 @@
+Hello.
+Good morning. Today I want to discuss the importance of technology in education.
+Artificial intelligence helps people solve complex problems more efficiently.
+Students should develop practical skills alongside their theoretical knowledge.
+Real-time translation can make communication easier between people who speak different languages.
+The system should handle errors without losing previously processed information.
+Reliable software should preserve earlier results when a new task begins.
+Please wait a moment while I explain the next part of the presentation.
+This test should not take much time, and the final result should be easy to understand.
+While I speak continuously, the system should not lose words at the end of a phrase.
+When I pause between the sentences, the system should recognize the boundary without cutting off the previous sentence.
+I am speaking at a normal pace in a quiet room using my usual microphone.
+Okay, that is the end of the test.
+Thank you.

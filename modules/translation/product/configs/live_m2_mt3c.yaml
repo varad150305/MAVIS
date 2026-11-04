@@ -1,0 +1,278 @@
+# ============================================================
+# PRODUCT live translation: microphone -> frozen M2 -> MT3-C -> Hindi
+# ============================================================
+#
+# Product-only configuration. It is NOT a research configuration and is
+# never read by any evaluation script.
+#
+# Every M2 value below is copied unchanged from the frozen research
+# operating point evaluation/eval_configs/m2_preroll_cpu8.yaml (Whisper
+# tiny int8, 8 threads, Silero 0.6/0.3, 100/100 ms, 300 ms pre-roll,
+# StreamingBuffer 2000/8000 ms, LocalAgreement-2). The only differences:
+#   * logging paths point at product_outputs/ (the launcher additionally
+#     redirects them into a per-session folder);
+#   * the `product:` section, which only the product launcher reads.
+#
+# features.* stay at their M2 values on purpose: main.run_m2() refuses
+# the M3 flags. MT3-C runs in the product layer (product/live_pipeline.py)
+# on the stable-prefix events run_m2 already produces.
+# ============================================================
+
+system:
+  name: "M2"
+  description: "Product live path: frozen M2 streaming ASR + MT3-C scheduled English->Hindi MT"
+
+features:
+  use_adaptive_buffer: true
+  use_local_agreement: true
+  use_stability_controller: false
+  use_translation_stability: false
+
+audio:
+  sample_rate: 16000
+  channels: 1
+  dtype: "float32"
+  chunk_duration_ms: 100
+  buffer_size_ms: 800
+  overlap_ms: 200
+  max_buffer_size_ms: 5000
+  # null = system default input device; override with --device.
+  device: null
+
+vad:
+  enabled: true
+  model: "silero_vad"
+  sample_rate: 16000
+  speech_start_threshold: 0.6
+  speech_end_threshold: 0.3
+  minimum_speech_duration_ms: 100
+  minimum_silence_duration_ms: 100
+
+asr:
+  backend: "faster-whisper"
+  model_size: "tiny"
+  device: "cpu"
+  compute_type: "int8"
+  # PRODUCT DEVIATION (2026-10-28): the frozen research value is null
+  # (auto-detect per decode). The product accepts English speech only, and
+  # forcing "en" left the recognized words unchanged on both controlled
+  # inputs while cutting Whisper tiny's decode time ~40% on battery
+  # (1458 -> 852 ms p50; product_outputs/diagnostics/). For the slower but
+  # more accurate model use: --set asr.model_size=base (recommended on AC).
+  language: "en"
+  beam_size: 1
+  temperature: 0.0
+  vad_filter: false
+  word_timestamps: true
+  use_local_agreement: true
+  cpu_threads: 8
+
+translation:
+  enabled: true
+  backend: "transformers"
+  model: "Helsinki-NLP/opus-mt-en-hi"
+  # Frozen MT-1 snapshot (configs/mt.yaml); loaded offline.
+  revision: "75d7f7c9232b2891c7d65fe4ef635616c72be867"
+  source_language: "en"
+  target_language: "hi"
+  device: "cpu"
+  max_input_tokens: 256
+  num_beams: 1
+  max_new_tokens: 256
+
+cpu:
+  threads: 8
+  inter_op_threads: 2
+  intra_op_threads: 4
+  # torch threads for MT (frozen MT-1 value).
+  torch_threads: 8
+
+streaming:
+  window_queue_size: 4
+  window_queue_policy: "keep_latest"
+
+# Read but unused by run_m2 (kept so build_adaptive_buffer() validation
+# stays satisfiable, exactly as in the research config).
+adaptive_buffer:
+  enabled: true
+  initial_window_ms: 3000
+  min_window_ms: 1000
+  max_window_ms: 5000
+  step_ms: 2000
+  min_new_audio_ms: 500
+  max_context_ms: 3000
+  overlap_ms: 1000
+
+local_agreement:
+  enabled: true
+  agreement_depth: 2
+  history_size: 5
+  alignment_method: "lcs"
+  timing_method: "interpolated"
+
+streaming_buffer:
+  enabled: true
+  min_new_audio_ms: 2000
+  max_buffer_ms: 8000
+  pre_roll_ms: 300
+
+prefix_agreement:
+  agreement_depth: 2
+  prompt_word_limit: 200
+
+logging:
+  level: "INFO"
+  # Console logging is off: the launcher prints its own display.
+  console: false
+  file_enabled: true
+  file: "runtime_data/sessions/latest/m2.log"
+  json_enabled: true
+  json_file: "runtime_data/sessions/latest/m2_events.jsonl"
+
+performance:
+  use_perf_counter: true
+  warmup_asr: true
+  warmup_translation: true
+  collect_latency_percentiles: true
+
+output:
+  print_transcription: true
+  print_translation: true
+  save_transcripts: true
+  transcript_file: "runtime_data/sessions/latest/transcript.jsonl"
+
+# ------------------------------------------------------------
+# PRODUCT-ONLY SETTINGS (read by product/ only)
+# ------------------------------------------------------------
+product:
+  output_root: "runtime_data/sessions"
+
+  # MT invocation policy over stable source updates:
+  #   mt3c  - frozen AdaptiveDeadlinePolicy (evaluation/mt3c_parameters.json,
+  #           SHA-checked at startup)
+  #   eager - MT3-A: translate every stable update with new words
+  #   fixed - MT3-B with fixed_k
+  policy: "mt3c"
+  mt3c_parameters: "evaluation/mt3c_parameters.json"
+  mt3c_parameters_sha256: "56e86c68c791c7447e266c98de23d9c71068786a98e30404aea17617a0e42bb3"
+  fixed_k: 8
+
+  # Translation segments. The research scheduler re-translates the full
+  # stable prefix of one evaluation sample (median ~9.5 s of audio). A live
+  # session has no sample boundary, so the product closes a segment and
+  # starts a new one - otherwise every MT call would re-translate the whole
+  # session. A segment closes:
+  #   * at an utterance-final commit once it holds >= close_after_words, or
+  #   * when no stable update arrived for idle_close_s after an
+  #     utterance-final commit, or
+  #   * at any update once it holds >= hard_max_words (long unbroken speech).
+  #   * (phase 3) at an utterance-final commit whose decode ends in . ? !
+  #     once it holds >= sentence_min_words and the speaker paused for
+  #     sentence_gap_s (a shorter pause - a hesitation - keeps it open).
+  #     Saved session 2026-10-28 19:48: VAD pauses inside sentences were
+  #     0.1-0.2 s, between sentences 0.4-3.1 s (all but one >= 0.8 s).
+  segment:
+    close_after_words: 20
+    idle_close_s: 2.5
+    hard_max_words: 60
+    sentence_gap_s: 0.6
+    # (phase 9) was 3: "please wait a moment." (4 words, ~0.5 s reading
+    # pause) closed alone and "while i explain ..." was translated as a
+    # fragment with no verb (live 2026-10-29 battery). Shorter sentences now
+    # close on the idle rule (2.5 s) or join the next sentence.
+    sentence_min_words: 5
+    # (phase 9) at >= close_after_words, close at an utterance end only after
+    # the same VAD-measured 0.6 s pause; a VAD split inside a sentence (the
+    # speaker goes on at once) keeps the segment open (hard cap still 60).
+    long_close_needs_pause: true
+    # ... but from 32 words on, close at the next utterance end anyway
+    # (reading pauses between sentences are often shorter than 0.6 s; without
+    # this, segments grew to ~48 words and final Hindi came ~20 s late).
+    long_close_max_words: 32
+
+  # Reset Silero VAD's recurrent state after this much continuous
+  # non-speech (null disables). The research harness reset the VAD for
+  # every file; without a reset, quiet speech that follows loud speech can
+  # go undetected (measured on product_outputs/test_inputs/session_mix.wav).
+  # Product-only deviation from the continuous-VAD behaviour of main.py.
+  vad_reset_after_silence_s: 2.0
+
+  # ---- 2026-10-28 live-quality fixes (product_outputs/diagnostics/) ----
+  # Commit-boundary repair (audit D7): words Whisper places up to
+  # tolerance_s before the confirmed boundary are kept; a repeated leading
+  # n-gram is dropped. Applied to a copy of each hypothesis before the
+  # unchanged tracker. Controlled corpus: deletions 13 -> 4.
+  boundary_repair:
+    enabled: true
+    tolerance_s: 0.3
+    max_ngram: 5
+
+  # Drop words that would extend a run of >= min_run copies of the same
+  # 1..max_ngram sequence (Whisper repetition loops; a controlled corpus run
+  # committed "s" 112 times). Display/MT only; the tracker is unchanged.
+  repetition_guard:
+    enabled: true
+    max_ngram: 3
+    min_run: 4
+
+  # Whisper initial_prompt carry-over across utterances. Measured harmful
+  # (corpus insertions 122 -> 736): keep 0.
+  prompt_carry_words: 0
+
+  # (phase 3) Keep this much already-confirmed audio when run_m2 trims the
+  # buffer at a commit boundary (research M2 trims exactly at the boundary,
+  # so the next decode starts mid-speech with no left context), and prompt
+  # Whisper only with confirmed words no longer in the audio. Saved session
+  # replay: "health people" -> "helps people", "so i should" -> "software
+  # should", "a function of the handle" -> "system should handle"; tiny WER
+  # 18.8% -> 13.6% on the recording, corpus12 17.7% -> 18.1% (+1 error),
+  # TTS script 0% -> 0%. 1.5-2.0 s lost words in window replays. 0 = off.
+  trim_keep_s: 1.0
+
+  # (phase 4.6) With trim_keep_s, if omitting the still-audible confirmed
+  # words leaves fewer than this many, Whisper gets NO prompt instead of the
+  # fragment. Saved session 2026-10-29 11:24, utterance 17: prompt "my" made
+  # the final decode collapse to "cell phone." (13/30 perturbations of the
+  # saved window; 0/30 without a prompt) and "quiet room using my usual
+  # microphone" was lost. AC replays of the 3 saved recordings: WER equal on
+  # two, 9.7% -> 8.4% on the third; no word loss or duplicates. 0 = off.
+  prompt_min_words: 3
+
+  # (phase 9) An utterance's FINAL window is the whole utterance, decoded
+  # without a prompt, when it is at most this long (s; 0 = off). The
+  # trimmed final windows produced "normal paste" and, prompt-induced,
+  # "using my use of microphone" (live 2026-10-29); the whole utterance
+  # gives "pace" / "usual" with the same model. 8 s = the research
+  # buffer's max_buffer_ms; longer utterances keep the trimmed final window.
+  final_window_full_max_s: 8.0
+
+  # (phase 9) Drop a word duplicated across a contiguous VAD utterance cut
+  # (both copies touching the cut; "between people people who"). Repeats
+  # separated by a real pause, or inside an utterance, are kept.
+  cross_utterance_dedup: true
+
+  # (phase 4.6) Display-only provisional English: print each non-final
+  # Whisper hypothesis as "EN ? ?| ... (provisional, may change)". Never
+  # committed or translated. Off by default (see phase-4.6 report).
+  display_provisional_en: false
+
+  # (phase 6) Microphone stall: no audio frames at all for this many seconds
+  # while capturing (ordinary silence still delivers frames) -> one
+  # audio_stall warning, then audio_resumed when frames return. null = off.
+  # Product-only observability; it does not change what the pipeline decodes.
+  audio_stall_s: 2.0
+
+  # (phase 5) Host-integration feature flag, default OFF: a host application
+  # (future MAVIS shell) must call product.session.create_host_session(),
+  # which refuses while this is false. The standalone CLI and the standalone
+  # UI (python -m product.ui) are the product itself and do not check it.
+  integration:
+    live_translation_enabled: false
+
+  # Final-quality translation of each closed segment (product/final_mt.py):
+  # NLLB-200 distilled 600M, CTranslate2 int8, converted locally from the
+  # cached snapshot. Drafts stay on opus-mt-en-hi (MT3-C scheduled).
+  final_mt:
+    enabled: true
+    model_dir: "models/nllb-200-distilled-600M-ct2-int8"
+    threads: 4

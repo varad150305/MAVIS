@@ -1,0 +1,5 @@
+# CPU-only PyTorch, installed first by setup_demo.ps1:
+#   python -m pip install -r requirements-torch-cpu.txt
+--index-url https://download.pytorch.org/whl/cpu
+torch==2.7.1+cpu
+torchaudio==2.7.1+cpu

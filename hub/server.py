@@ -19,7 +19,7 @@ import sys
 
 from aiohttp import web
 
-from . import drishti_api, offline, security
+from . import drishti_api, offline, security, translation_service
 from .paths import DRISHTI, DRISHTI_WEB, HUB_STATIC
 
 NO_STORE = {"Cache-Control": "no-store"}
@@ -95,6 +95,12 @@ class Hub:
         async def offline_page(request):
             return page(request, "offline.html")
 
+        async def control_page(request):
+            return page(request, "control.html")
+
+        async def translate_page(request):
+            return page(request, "translate.html")
+
         async def status(request):
             local = security.is_local(request)
             mavis = {}
@@ -106,6 +112,7 @@ class Hub:
                     "drishti": {"ok": (DRISHTI_WEB / "index.html").exists(), **drishti_api.status()},
                     "mavis": {"ok": hub.mavis_state is not None, "error": hub.errors.get("mavis"), **mavis},
                     "gesture": {"ok": hub.gesture_ok, "error": hub.errors.get("gesture")},
+                    "translation": request.app["translation"].status(),
                 },
                 "this_computer": local,
                 "secure": request.secure or local,
@@ -133,6 +140,11 @@ class Hub:
         app.router.add_get("/", launcher)
         app.router.add_get("/gesture", redirect("/gesture/"))
         app.router.add_get("/gesture/", gesture_page)
+        app.router.add_get("/control", redirect("/control/"))
+        app.router.add_get("/control/", control_page)
+        app.router.add_get("/translate", redirect("/translate/"))
+        app.router.add_get("/translate/", translate_page)
+        translation_service.add_routes(app)
         app.router.add_get("/offline", redirect("/offline/"))
         app.router.add_get("/offline/", offline_page)
         app.router.add_get("/hub/status", status)

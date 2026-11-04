@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Live Translation · MAVIS</title>
+<style>
+:root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --ink:#f3f4f6; --muted:#9ca3af; --accent:#a78bfa; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; }
+* { box-sizing: border-box; }
+html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:16px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.app { display:grid; grid-template-rows:auto 1fr; height:100%; }
+header { display:flex; align-items:center; gap:12px; padding:10px 16px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+header h1 { font-size:18px; margin:0; font-weight:700; }
+.pill { display:inline-flex; align-items:center; gap:8px; padding:5px 12px; border-radius:99px; background:var(--panel); border:1px solid var(--line); font-weight:600; font-size:14px; }
+.dot { width:9px; height:9px; border-radius:50%; background:var(--muted); }
+.dot.ok { background:var(--ok); } .dot.warn { background:var(--warn); } .dot.bad { background:var(--bad); }
+.sp { flex:1; }
+button { font:700 15px inherit; font-family:inherit; border:0; border-radius:12px; padding:10px 18px; cursor:pointer; }
+.start { background:var(--accent); color:#111; } .stop { background:#2a2f3a; color:var(--ink); }
+button:disabled { opacity:.45; cursor:default; }
+a.back { color:var(--muted); text-decoration:none; font-weight:600; }
+main { display:grid; grid-template-columns:1fr; min-height:0; }
+@media (min-width: 980px) { main { grid-template-columns: 1fr 380px; } }
+.stage { position:relative; background:#000; min-height:280px; overflow:hidden; }
+.stage video { width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
+.stage .nocam { position:absolute; inset:0; display:grid; place-items:center; color:var(--muted); background:#111318; }
+.subs { position:absolute; left:50%; bottom:5%; transform:translateX(-50%); width:min(92%, 980px); text-align:center; pointer-events:none; }
+.subs .en { display:inline-block; font-size:clamp(16px, 2.2vw, 22px); background:rgba(0,0,0,.62); padding:4px 12px; border-radius:8px; margin-bottom:6px; }
+.subs .hi { display:inline-block; font-size:clamp(22px, 3.4vw, 38px); font-weight:700; background:rgba(0,0,0,.72); padding:6px 14px; border-radius:10px; }
+.subs .hi.draft { color:#cbd5e1; font-weight:500; font-style:italic; }
+.hint { position:absolute; top:12px; left:12px; background:rgba(0,0,0,.55); padding:6px 10px; border-radius:8px; font-size:14px; color:#e5e7eb; }
+aside { border-left:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+aside h2 { font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:14px 16px 6px; }
+.log { overflow:auto; padding:0 16px 16px; flex:1; }
+.seg { border:1px solid var(--line); background:var(--panel); border-radius:12px; padding:10px 12px; margin-bottom:10px; }
+.seg .e { color:#d1d5db; font-size:14px; }
+.seg .h { font-size:19px; font-weight:700; margin-top:4px; }
+.seg .h.draft { color:#9ca3af; font-weight:500; font-style:italic; }
+.seg .h.draft::after { content:"  DRAFT – may change"; font-size:11px; font-style:normal; color:var(--warn); }
+.err { color:#fca5a5; font-size:14px; margin:8px 16px; }
+.empty { color:var(--muted); font-size:14px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <a class="back" href="/" target="_top">‹ MAVIS</a>
+    <h1>Live Translation <span style="color:var(--muted);font-weight:500">English → हिन्दी</span></h1>
+    <span class="pill" id="state"><span class="dot"></span><span>Connecting…</span></span>
+    <span class="sp"></span>
+    <button class="start" id="startBtn">Start</button>
+    <button class="stop" id="stopBtn" disabled>Stop</button>
+  </header>
+  <main>
+    <div class="stage">
+      <video id="cam" autoplay playsinline muted></video>
+      <div class="nocam" id="nocam">Speak English into this computer's microphone</div>
+      <div class="hint" id="hint">Yogita's translation module · microphone of the computer running MAVIS</div>
+      <div class="subs"><div><span class="en" id="subEn" hidden></span></div><div><span class="hi" id="subHi" hidden></span></div></div>
+    </div>
+    <aside>
+      <h2>Transcript</h2>
+      <div class="err" id="err" hidden></div>
+      <div class="log" id="log"><p class="empty" id="empty">Press Start (or show ✌️ from Gesture control), then speak English. Hindi appears per sentence: first a grey draft, then the final.</p></div>
+    </aside>
+  </main>
+</div>
+<script>
+'use strict';
+const $ = (s) => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+const segs = new Map();      // segment_id -> {en, hi, final}
+let sessionId = null, lastSeq = 0, lastSeg = null, ws = null, state = 'off';
+
+function setState(s, text) {
+  state = s;
+  const cls = { ready: 'ok', starting: 'warn', stopping: 'warn', failed: 'bad', error: 'bad', stall: 'warn' }[s] || '';
+  $('#state').innerHTML = `<span class="dot ${cls}"></span><span>${text}</span>`;
+  const running = ['starting', 'ready', 'stall'].includes(s);
+  $('#startBtn').disabled = running || s === 'stopping' || s === 'unavailable';
+  $('#stopBtn').disabled = !running;
+}
+function seg(id) { if (!segs.has(id)) segs.set(id, { en: '', hi: '', final: false }); return segs.get(id); }
+function render(id) {
+  const s = segs.get(id); if (!s) return;
+  $('#empty')?.remove();
+  let el = document.getElementById('seg-' + id);
+  if (!el) { el = document.createElement('div'); el.className = 'seg'; el.id = 'seg-' + id; el.innerHTML = '<div class="e"></div><div class="h"></div>'; $('#log').appendChild(el); }
+  el.querySelector('.e').textContent = s.en;
+  const h = el.querySelector('.h'); h.textContent = s.hi; h.className = 'h' + (s.final || !s.hi ? '' : ' draft');
+  el.scrollIntoView({ block: 'end', behavior: 'smooth' });
+  if (id === lastSeg) {
+    $('#subEn').hidden = !s.en; $('#subEn').textContent = s.en;
+    $('#subHi').hidden = !s.hi; $('#subHi').textContent = s.hi; $('#subHi').className = 'hi' + (s.final ? '' : ' draft');
+  }
+}
+function showErr(t) { $('#err').hidden = !t; $('#err').textContent = t || ''; }
+
+function handle(e) {
+  if (e.type === 'bridge') {
+    if (e.state === 'error') { setState('error', 'Could not start'); showErr(e.error); }
+    if (e.state === 'exited' && state !== 'off') setState('off', 'Stopped');
+    return;
+  }
+  if (e.session_id && e.type === 'session_state' && e.state === 'starting' && e.session_id !== sessionId) { sessionId = e.session_id; lastSeq = 0; segs.clear(); }
+  if (e.session_id && sessionId && e.session_id !== sessionId) return;      // her contract: drop other sessions
+  if (e.seq !== undefined) { if (e.seq <= lastSeq) return; lastSeq = e.seq; }
+  switch (e.type) {
+    case 'session_state':
+      showErr('');
+      if (e.state === 'starting') setState('starting', 'Loading models… (about 10 s)');
+      else if (e.state === 'ready') setState('ready', 'Listening — speak English');
+      else if (e.state === 'stopping') setState('stopping', 'Stopping…');
+      else if (e.state === 'stopped') setState('off', 'Stopped');
+      else if (e.state === 'failed') { setState('failed', 'Failed'); showErr(e.error || 'The translation worker stopped.'); }
+      break;
+    case 'en_committed': { const s = seg(e.segment_id); s.en = e.stable_text || (s.en + ' ' + (e.new_text || '')).trim(); lastSeg = e.segment_id; render(e.segment_id); break; }
+    case 'hi_draft': { const s = seg(e.segment_id); if (!s.final) { s.hi = e.target_text || ''; lastSeg = e.segment_id; render(e.segment_id); } break; }
+    case 'hi_final': { const s = seg(e.segment_id); s.hi = e.target_text || s.hi; s.final = true; render(e.segment_id); break; }
+    case 'audio_stall': setState('stall', 'No microphone input'); break;
+    case 'audio_resumed': setState('ready', 'Listening — speak English'); break;
+    case 'mt_error': case 'final_mt_error': case 'error': case 'cleanup_error': showErr((e.where ? e.where + ': ' : '') + (e.error || e.message || 'error')); break;
+  }
+}
+
+function connect() {
+  ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/hub/translation/ws');
+  ws.onmessage = (m) => {
+    const e = JSON.parse(m.data);
+    if (e.type === 'hello') {
+      if (!e.status.ok) { setState('unavailable', 'Not installed'); showErr(e.status.message); return; }
+      setState(['starting', 'ready'].includes(e.status.state) ? e.status.state : 'off', e.status.state === 'ready' ? 'Listening — speak English' : 'Ready to start');
+      (e.history || []).forEach(handle);
+      if (params.get('autostart') === '1' && !['starting', 'ready'].includes(e.status.state)) start();
+      return;
+    }
+    handle(e);
+  };
+  ws.onclose = () => { setState('off', 'Disconnected'); setTimeout(connect, 2000); };
+}
+function start() { showErr(''); ws && ws.readyState === 1 && ws.send(JSON.stringify({ cmd: 'start' })); setState('starting', 'Starting…'); }
+$('#startBtn').onclick = start;
+$('#stopBtn').onclick = () => { ws.send(JSON.stringify({ cmd: 'stop' })); setState('stopping', 'Stopping…'); };
+
+(async () => {   // camera picture behind the subtitles, as in Yogita's desktop UI (optional)
+  try {
+    const s = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: false });
+    $('#cam').srcObject = s; $('#nocam').hidden = true;
+  } catch (e) { /* no camera: plain background */ }
+})();
+connect();
+</script>
+</body>
+</html>

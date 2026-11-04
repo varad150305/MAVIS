@@ -1,0 +1,622 @@
+{
+ "source_root_at_packaging": "live_translation_final (sibling research repository; read-only)",
+ "note": "frozen_engine files are byte-identical copies of the research runtime and must not be edited; 'transformed' product files differ from their source only by the listed destination-only changes; no source file was modified",
+ "files": [
+  {
+   "group": "frozen_engine",
+   "source_path": "main.py",
+   "dest_path": "main.py",
+   "source_sha256": "6c99b2d9d5eb3c2082118f744b9acb25f402321f9bc8d54174a15cbe81e5b294",
+   "copy": "verbatim",
+   "dest_sha256": "6c99b2d9d5eb3c2082118f744b9acb25f402321f9bc8d54174a15cbe81e5b294"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "asr/__init__.py",
+   "dest_path": "asr/__init__.py",
+   "source_sha256": "e473fc6e692ecf7295dbb5e10c072d1c3f60e7c433e4f572e04fddcb542900b2",
+   "copy": "verbatim",
+   "dest_sha256": "e473fc6e692ecf7295dbb5e10c072d1c3f60e7c433e4f572e04fddcb542900b2"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "asr/whisper_engine.py",
+   "dest_path": "asr/whisper_engine.py",
+   "source_sha256": "79df32fe1cd69e3cf818a9b6bb8deca25502268cefdfc1c59adf1c6f81e831e5",
+   "copy": "verbatim",
+   "dest_sha256": "79df32fe1cd69e3cf818a9b6bb8deca25502268cefdfc1c59adf1c6f81e831e5"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "asr/worker.py",
+   "dest_path": "asr/worker.py",
+   "source_sha256": "05b33aa3a56b0f39dec242481567ed75eb6a4440db5c2f484a0dd1754c4d6265",
+   "copy": "verbatim",
+   "dest_sha256": "05b33aa3a56b0f39dec242481567ed75eb6a4440db5c2f484a0dd1754c4d6265"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "audio/__init__.py",
+   "dest_path": "audio/__init__.py",
+   "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "copy": "verbatim",
+   "dest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "audio/audio_stream.py",
+   "dest_path": "audio/audio_stream.py",
+   "source_sha256": "eeb6797fa513cd023e9fd6992ccf65775019771b7ce53ae56b68cdbbf3080127",
+   "copy": "verbatim",
+   "dest_sha256": "eeb6797fa513cd023e9fd6992ccf65775019771b7ce53ae56b68cdbbf3080127"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "vad/__init__.py",
+   "dest_path": "vad/__init__.py",
+   "source_sha256": "04f0fdf009925b7636028be0b8025b35ea4ed09f8f2ba73410ed2c94450aa044",
+   "copy": "verbatim",
+   "dest_sha256": "04f0fdf009925b7636028be0b8025b35ea4ed09f8f2ba73410ed2c94450aa044"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "vad/vad.py",
+   "dest_path": "vad/vad.py",
+   "source_sha256": "9bd686aece68def95dae61138a228c7b77f40325188ea7f96317d2a2ef3a21cc",
+   "copy": "verbatim",
+   "dest_sha256": "9bd686aece68def95dae61138a228c7b77f40325188ea7f96317d2a2ef3a21cc"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/__init__.py",
+   "dest_path": "streaming/__init__.py",
+   "source_sha256": "93592fa416a367e89ef174ed65a7fc7cc2e10d1e6b3af72dcacffd675408d937",
+   "copy": "verbatim",
+   "dest_sha256": "93592fa416a367e89ef174ed65a7fc7cc2e10d1e6b3af72dcacffd675408d937"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/adaptive_buffer.py",
+   "dest_path": "streaming/adaptive_buffer.py",
+   "source_sha256": "ae23c3c4a9a849e9a4190151c548a499201f9f2fbbfbb710971e0d078edc1fba",
+   "copy": "verbatim",
+   "dest_sha256": "ae23c3c4a9a849e9a4190151c548a499201f9f2fbbfbb710971e0d078edc1fba"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/backpressure.py",
+   "dest_path": "streaming/backpressure.py",
+   "source_sha256": "4545a068c2aa9ff8817bfd331bf979c49d5f5e9ea70c0f42ff182646ba527a45",
+   "copy": "verbatim",
+   "dest_sha256": "4545a068c2aa9ff8817bfd331bf979c49d5f5e9ea70c0f42ff182646ba527a45"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/buffer.py",
+   "dest_path": "streaming/buffer.py",
+   "source_sha256": "d2c7b33440e5a3d789461e6486a46201a48323c28b6fbbbe611abe40218a439b",
+   "copy": "verbatim",
+   "dest_sha256": "d2c7b33440e5a3d789461e6486a46201a48323c28b6fbbbe611abe40218a439b"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/local_agreement.py",
+   "dest_path": "streaming/local_agreement.py",
+   "source_sha256": "3f1f1356bbaeeead8ceb8c28dff5f9ab5cbadb524f45f9d2d2621027ca5a7bf5",
+   "copy": "verbatim",
+   "dest_sha256": "3f1f1356bbaeeead8ceb8c28dff5f9ab5cbadb524f45f9d2d2621027ca5a7bf5"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/prefix_agreement.py",
+   "dest_path": "streaming/prefix_agreement.py",
+   "source_sha256": "50b13ee877293ec63c5687e2c550130ca070a46959c692e96053a408fcd94ac0",
+   "copy": "verbatim",
+   "dest_sha256": "50b13ee877293ec63c5687e2c550130ca070a46959c692e96053a408fcd94ac0"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/streaming_asr.py",
+   "dest_path": "streaming/streaming_asr.py",
+   "source_sha256": "5d3214ca87ea10ab401c92e498208ac091f3a65c0efe33cf5743c22ae69cdbe0",
+   "copy": "verbatim",
+   "dest_sha256": "5d3214ca87ea10ab401c92e498208ac091f3a65c0efe33cf5743c22ae69cdbe0"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/streaming_buffer.py",
+   "dest_path": "streaming/streaming_buffer.py",
+   "source_sha256": "68d2d0c2004d0585a41d4ebb95e365ac1e0d1abf4848b9e4e69aa0b551da8279",
+   "copy": "verbatim",
+   "dest_sha256": "68d2d0c2004d0585a41d4ebb95e365ac1e0d1abf4848b9e4e69aa0b551da8279"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/streaming_state.py",
+   "dest_path": "streaming/streaming_state.py",
+   "source_sha256": "bd38df9d45cd5fcb766843b2b70c51bfa673ddc164990b75c6e5bc249b3839f7",
+   "copy": "verbatim",
+   "dest_sha256": "bd38df9d45cd5fcb766843b2b70c51bfa673ddc164990b75c6e5bc249b3839f7"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "streaming/word_alignment.py",
+   "dest_path": "streaming/word_alignment.py",
+   "source_sha256": "802973b50ed9816b1d94cd5add57d18301b75074eb135d5faa9c29c512137951",
+   "copy": "verbatim",
+   "dest_sha256": "802973b50ed9816b1d94cd5add57d18301b75074eb135d5faa9c29c512137951"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "translation/__init__.py",
+   "dest_path": "translation/__init__.py",
+   "source_sha256": "6a1d86dd74e7d10b85af833f29ae615e568554c64ed6a1d5ef30f42a34531391",
+   "copy": "verbatim",
+   "dest_sha256": "6a1d86dd74e7d10b85af833f29ae615e568554c64ed6a1d5ef30f42a34531391"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "translation/incremental.py",
+   "dest_path": "translation/incremental.py",
+   "source_sha256": "9b155773e04707dd70384609105ea1f9061a67d1c943b4834f3afb45472e2c9d",
+   "copy": "verbatim",
+   "dest_sha256": "9b155773e04707dd70384609105ea1f9061a67d1c943b4834f3afb45472e2c9d"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "translation/scheduling.py",
+   "dest_path": "translation/scheduling.py",
+   "source_sha256": "569b98689c244340563aef56d2e43bbcc26fd33401a622bdc1efafd98be6a144",
+   "copy": "verbatim",
+   "dest_sha256": "569b98689c244340563aef56d2e43bbcc26fd33401a622bdc1efafd98be6a144"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "translation/translator.py",
+   "dest_path": "translation/translator.py",
+   "source_sha256": "45f0203a7ee5262d4d9f2734fea16bd7b1faa178fdc81db91345e1a16d8decd9",
+   "copy": "verbatim",
+   "dest_sha256": "45f0203a7ee5262d4d9f2734fea16bd7b1faa178fdc81db91345e1a16d8decd9"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "translation/worker.py",
+   "dest_path": "translation/worker.py",
+   "source_sha256": "0290a674d254d4c2e21aa4f45791f1a30959303c2ef9b951764da4b546e1c83d",
+   "copy": "verbatim",
+   "dest_sha256": "0290a674d254d4c2e21aa4f45791f1a30959303c2ef9b951764da4b546e1c83d"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "utils/__init__.py",
+   "dest_path": "utils/__init__.py",
+   "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "copy": "verbatim",
+   "dest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "utils/config.py",
+   "dest_path": "utils/config.py",
+   "source_sha256": "6f206bee8cf2b7a4d5be36697b67b9aedac8bc3835a724807644912e61ec4c02",
+   "copy": "verbatim",
+   "dest_sha256": "6f206bee8cf2b7a4d5be36697b67b9aedac8bc3835a724807644912e61ec4c02"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "utils/logger.py",
+   "dest_path": "utils/logger.py",
+   "source_sha256": "b19229715546211694c9b58e9fe78bbcfd2599a58f27e160a6cfee14e459837a",
+   "copy": "verbatim",
+   "dest_sha256": "b19229715546211694c9b58e9fe78bbcfd2599a58f27e160a6cfee14e459837a"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "evaluation/__init__.py",
+   "dest_path": "evaluation/__init__.py",
+   "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "copy": "verbatim",
+   "dest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "evaluation/asr_evaluation.py",
+   "dest_path": "evaluation/asr_evaluation.py",
+   "source_sha256": "3bf5809aaa3439c85c2be265de068e70e0895877bbf0d590a517bcb9968d3e31",
+   "copy": "verbatim",
+   "dest_sha256": "3bf5809aaa3439c85c2be265de068e70e0895877bbf0d590a517bcb9968d3e31"
+  },
+  {
+   "group": "frozen_engine",
+   "source_path": "evaluation/mt3c_parameters.json",
+   "dest_path": "evaluation/mt3c_parameters.json",
+   "source_sha256": "56e86c68c791c7447e266c98de23d9c71068786a98e30404aea17617a0e42bb3",
+   "copy": "verbatim",
+   "dest_sha256": "56e86c68c791c7447e266c98de23d9c71068786a98e30404aea17617a0e42bb3"
+  },
+  {
+   "group": "product",
+   "source_path": "product/__init__.py",
+   "dest_path": "product/__init__.py",
+   "source_sha256": "6d9dd03963846a3a4a1d1ddf1ea989522f0ea95d304b4252472219396208d35b",
+   "copy": "transformed",
+   "transform_reason": "pin the Hugging Face cache to <package>/models/huggingface and stay offline",
+   "dest_sha256": "eb5469aaf4a912ce93983a75cf04982a141e9aa63f222eb99282a8aa6935e3db"
+  },
+  {
+   "group": "product",
+   "source_path": "product/final_mt.py",
+   "dest_path": "product/final_mt.py",
+   "source_sha256": "94f8d53e2f8cd6b78233ebcef30d8bd9eaed25d369c9f1942809cbc3bcd1d214",
+   "copy": "transformed",
+   "transform_reason": "default NLLB directory inside the package",
+   "dest_sha256": "1c759b874952cc2670f451d4b99e797725d78ed93af3fef6fb5f02c529d47777"
+  },
+  {
+   "group": "product",
+   "source_path": "product/latency.py",
+   "dest_path": "product/latency.py",
+   "source_sha256": "e44e77add1239719c3bedd45b2f60804fa156b87a51fb9781d91cab43e81d76c",
+   "copy": "verbatim",
+   "dest_sha256": "e44e77add1239719c3bedd45b2f60804fa156b87a51fb9781d91cab43e81d76c"
+  },
+  {
+   "group": "product",
+   "source_path": "product/lifecycle.py",
+   "dest_path": "product/lifecycle.py",
+   "source_sha256": "57c6d69245191e02ea7e1c6ab29f87be2001f323a9ede54d5f312942a7809172",
+   "copy": "verbatim",
+   "dest_sha256": "57c6d69245191e02ea7e1c6ab29f87be2001f323a9ede54d5f312942a7809172"
+  },
+  {
+   "group": "product",
+   "source_path": "product/live_pipeline.py",
+   "dest_path": "product/live_pipeline.py",
+   "source_sha256": "c33e4c803bfe9033cbbec709842a16fcbf0cdde54b74b22fe570d77cf0ab02a7",
+   "copy": "verbatim",
+   "dest_sha256": "c33e4c803bfe9033cbbec709842a16fcbf0cdde54b74b22fe570d77cf0ab02a7"
+  },
+  {
+   "group": "product",
+   "source_path": "product/live_translate.py",
+   "dest_path": "product/live_translate.py",
+   "source_sha256": "ab4b2443ee1876ffe05df27b44ba08cc2976b14f48dcb296031140c32b68cfd3",
+   "copy": "transformed",
+   "transform_reason": "fallback output root inside the package",
+   "dest_sha256": "b7a717979dede2fb24450799de1918591d87df665cc786a239c955c2dee26373"
+  },
+  {
+   "group": "product",
+   "source_path": "product/metrics_panel.py",
+   "dest_path": "product/metrics_panel.py",
+   "source_sha256": "e3dcf346acfb5316afd06045cb7b18209d8c040e4d8da4955d7b739b85c05598",
+   "copy": "verbatim",
+   "dest_sha256": "e3dcf346acfb5316afd06045cb7b18209d8c040e4d8da4955d7b739b85c05598"
+  },
+  {
+   "group": "product",
+   "source_path": "product/runtime.py",
+   "dest_path": "product/runtime.py",
+   "source_sha256": "9315a70da1203e6585d48d4f2d5083a84f3f8ace67c96a57c57f1093b98e8d0d",
+   "copy": "verbatim",
+   "dest_sha256": "9315a70da1203e6585d48d4f2d5083a84f3f8ace67c96a57c57f1093b98e8d0d"
+  },
+  {
+   "group": "product",
+   "source_path": "product/session.py",
+   "dest_path": "product/session.py",
+   "source_sha256": "fa662e49c7a28aef345ac18756df26be3d79b3c5989060c9e56d789999e9b2c1",
+   "copy": "transformed",
+   "transform_reason": "worker imports always resolve from the package; relative paths keep the host's meaning",
+   "dest_sha256": "d2190a5bc2c0a580fb306aab30da3e933d0e3129a56350cf9778202f1640445a"
+  },
+  {
+   "group": "product",
+   "source_path": "product/session_worker.py",
+   "dest_path": "product/session_worker.py",
+   "source_sha256": "22fad66d2ccc9bde7a761c6959712e9ca2a6c1b0d742863862b44d12247a7bea",
+   "copy": "verbatim",
+   "dest_sha256": "22fad66d2ccc9bde7a761c6959712e9ca2a6c1b0d742863862b44d12247a7bea"
+  },
+  {
+   "group": "product",
+   "source_path": "product/sources.py",
+   "dest_path": "product/sources.py",
+   "source_sha256": "a0a50e001f5f153145cc36557f4217d57a2e1a3eaa34a83d512eecb4ddd0abfd",
+   "copy": "verbatim",
+   "dest_sha256": "a0a50e001f5f153145cc36557f4217d57a2e1a3eaa34a83d512eecb4ddd0abfd"
+  },
+  {
+   "group": "product",
+   "source_path": "product/ui_model.py",
+   "dest_path": "product/ui_model.py",
+   "source_sha256": "8cd3369adfefbc9d1860d753ada10ed753337ce108f572b0712165b565f4a910",
+   "copy": "verbatim",
+   "dest_sha256": "8cd3369adfefbc9d1860d753ada10ed753337ce108f572b0712165b565f4a910"
+  },
+  {
+   "group": "product",
+   "source_path": "product/ui/__init__.py",
+   "dest_path": "product/ui/__init__.py",
+   "source_sha256": "ac466ebb8f64afb19c7bf452e0ca4f5b1b3353a9eb7afde5105004fe32bed0ca",
+   "copy": "verbatim",
+   "dest_sha256": "ac466ebb8f64afb19c7bf452e0ca4f5b1b3353a9eb7afde5105004fe32bed0ca"
+  },
+  {
+   "group": "product",
+   "source_path": "product/ui/__main__.py",
+   "dest_path": "product/ui/__main__.py",
+   "source_sha256": "8f533bc6a5d3be035f0cd265d6e1a33e9dad5fa0095527d9d3400ace4ade41ff",
+   "copy": "verbatim",
+   "dest_sha256": "8f533bc6a5d3be035f0cd265d6e1a33e9dad5fa0095527d9d3400ace4ade41ff"
+  },
+  {
+   "group": "product",
+   "source_path": "product/ui/app.py",
+   "dest_path": "product/ui/app.py",
+   "source_sha256": "fc57330dd057fec0ad28f84833bcca3ef25c6b084739a589013a04c5ed96bc2e",
+   "copy": "transformed",
+   "dest_sha256": "0f51820f2bf53d3dde800bb36f1474e98256e1333f9c28059a2de350004c4572",
+   "transform_reason": "UI-only change requested after packaging (2026-10-31): the speaker's camera (OpenCV) is the background of the transcript area; the same transcript runs and text-tag styles are drawn over it with a white readability veil; without a camera picture the original text widget is shown unchanged. Pipeline untouched. Netflix-style subtitles over the video (2026-10-31): only the active segment's English and Hindi, bottom-centre, replaced by the next segment, capped at 2/3 lines."
+  },
+  {
+   "group": "product",
+   "source_path": "product/tools/__init__.py",
+   "dest_path": "product/tools/__init__.py",
+   "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "copy": "verbatim",
+   "dest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "group": "product",
+   "source_path": "product/tools/convert_ct2.py",
+   "dest_path": "product/tools/convert_ct2.py",
+   "source_sha256": "56343fb0cec7c8c8508748027ada5332e2c571ac2a25f76e3ed4963d9ee1449d",
+   "copy": "verbatim",
+   "dest_sha256": "56343fb0cec7c8c8508748027ada5332e2c571ac2a25f76e3ed4963d9ee1449d"
+  },
+  {
+   "group": "product",
+   "source_path": "product/configs/live_m2_mt3c.yaml",
+   "dest_path": "product/configs/live_m2_mt3c.yaml",
+   "source_sha256": "4404f808561b18d2f73a962816874db5a629f234ab7c5102aa9dbb5ae5a9d4df",
+   "copy": "transformed",
+   "transform_reason": "session output and NLLB model directory inside the package",
+   "dest_sha256": "d75dd7c84c212335b2b3683dd9810f519e4acc7650657bee0810fc91ebf033dc"
+  },
+  {
+   "group": "product_tests",
+   "source_path": "product/tests/test_live_pipeline.py",
+   "dest_path": "product/tests/test_live_pipeline.py",
+   "source_sha256": "72ae08c438111a94d0de16a87896af33b02908c3d82609b19f7a03828dee1319",
+   "copy": "verbatim",
+   "dest_sha256": "72ae08c438111a94d0de16a87896af33b02908c3d82609b19f7a03828dee1319"
+  },
+  {
+   "group": "product_tests",
+   "source_path": "product/tests/test_quality_fixes.py",
+   "dest_path": "product/tests/test_quality_fixes.py",
+   "source_sha256": "8ffe83621e64934b92ba3edd2a6bff069b997a070531d5fb99f65c3d4db36549",
+   "copy": "verbatim",
+   "dest_sha256": "8ffe83621e64934b92ba3edd2a6bff069b997a070531d5fb99f65c3d4db36549"
+  },
+  {
+   "group": "product_tests",
+   "source_path": "product/tests/test_phase3_fixes.py",
+   "dest_path": "product/tests/test_phase3_fixes.py",
+   "source_sha256": "91a389feba1ea0521451e282602be18c05244c402f4baadc7f68b4df7457b44a",
+   "copy": "verbatim",
+   "dest_sha256": "91a389feba1ea0521451e282602be18c05244c402f4baadc7f68b4df7457b44a"
+  },
+  {
+   "group": "product_tests",
+   "source_path": "product/tests/test_phase46_gates.py",
+   "dest_path": "product/tests/test_phase46_gates.py",
+   "source_sha256": "57d0e90a866c7e6d50f213dc0b6d495ad11841e9a73f046749307ce1239b1775",
+   "copy": "verbatim",
+   "dest_sha256": "57d0e90a866c7e6d50f213dc0b6d495ad11841e9a73f046749307ce1239b1775"
+  },
+  {
+   "group": "product_tests",
+   "source_path": "product/tests/test_phase5_session.py",
+   "dest_path": "product/tests/test_phase5_session.py",
+   "source_sha256": "1af9f539c830dfde4dd569c687e90203c9737195d2371ff83701dd5233edf095",
+   "copy": "verbatim",
+   "dest_sha256": "1af9f539c830dfde4dd569c687e90203c9737195d2371ff83701dd5233edf095"
+  },
+  {
+   "group": "product_tests",
+   "source_path": "product/tests/test_phase6_hardening.py",
+   "dest_path": "product/tests/test_phase6_hardening.py",
+   "source_sha256": "051331f7518176e6860bd938d4c4124000bf477c51ae0df7c96a3a0a5eb9679b",
+   "copy": "verbatim",
+   "dest_sha256": "051331f7518176e6860bd938d4c4124000bf477c51ae0df7c96a3a0a5eb9679b"
+  },
+  {
+   "group": "product_tests",
+   "source_path": "product/tests/test_phase7_worker.py",
+   "dest_path": "product/tests/test_phase7_worker.py",
+   "source_sha256": "480481a12ae3cf9a9f8f552430235f066d95dbc936a305a933ba1b17d1cd9974",
+   "copy": "verbatim",
+   "dest_sha256": "480481a12ae3cf9a9f8f552430235f066d95dbc936a305a933ba1b17d1cd9974"
+  },
+  {
+   "group": "product_tests",
+   "source_path": "product/tests/test_phase9_fixes.py",
+   "dest_path": "product/tests/test_phase9_fixes.py",
+   "source_sha256": "fde21a76a7f3513a764115e63a4eccadfb0265c1417d3f14b6494bd650e44554",
+   "copy": "verbatim",
+   "dest_sha256": "fde21a76a7f3513a764115e63a4eccadfb0265c1417d3f14b6494bd650e44554"
+  }
+ ],
+ "models": [
+  {
+   "dest_path": "models/huggingface/hub/models--Systran--faster-whisper-tiny/snapshots/d90ca5fe260221311c53c58e660288d3deb8d356/config.json",
+   "bytes": 2249,
+   "sha256": "a73a28cdfe1c43ccc7202fa333d1f89c202477271407ae9a7f19afa52039cac8",
+   "note": "Whisper tiny (CTranslate2, faster-whisper 'tiny')",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Systran--faster-whisper-tiny/snapshots/d90ca5fe260221311c53c58e660288d3deb8d356/model.bin",
+   "bytes": 75538270,
+   "sha256": "dcb76c6586fc06cbdac6dd21f14cfd129cc4cdd9dce19bf4ffa62e59cbe6e6d1",
+   "note": "Whisper tiny (CTranslate2, faster-whisper 'tiny')",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Systran--faster-whisper-tiny/snapshots/d90ca5fe260221311c53c58e660288d3deb8d356/tokenizer.json",
+   "bytes": 2203239,
+   "sha256": "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab",
+   "note": "Whisper tiny (CTranslate2, faster-whisper 'tiny')",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Systran--faster-whisper-tiny/snapshots/d90ca5fe260221311c53c58e660288d3deb8d356/vocabulary.txt",
+   "bytes": 459861,
+   "sha256": "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913",
+   "note": "Whisper tiny (CTranslate2, faster-whisper 'tiny')",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Helsinki-NLP--opus-mt-en-hi/snapshots/75d7f7c9232b2891c7d65fe4ef635616c72be867/config.json",
+   "bytes": 1394,
+   "sha256": "46dc173b18926410535ce00d2a236794f454020a1d1ea8d2d3ec2292d1450b14",
+   "note": "opus-mt-en-hi draft MT at the pinned revision",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Helsinki-NLP--opus-mt-en-hi/snapshots/75d7f7c9232b2891c7d65fe4ef635616c72be867/generation_config.json",
+   "bytes": 293,
+   "sha256": "3867e1793eb1a7d824bd5f298b922d165c6d80addcdab40c7cf9fdfbec01574a",
+   "note": "opus-mt-en-hi draft MT at the pinned revision",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Helsinki-NLP--opus-mt-en-hi/snapshots/75d7f7c9232b2891c7d65fe4ef635616c72be867/pytorch_model.bin",
+   "bytes": 305826357,
+   "sha256": "b07f16822d80aabd93e5ae05ac7e0dbda18989ecb3942e926214ef13ddb593dd",
+   "note": "opus-mt-en-hi draft MT at the pinned revision",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Helsinki-NLP--opus-mt-en-hi/snapshots/75d7f7c9232b2891c7d65fe4ef635616c72be867/source.spm",
+   "bytes": 812240,
+   "sha256": "fd4e951487aed00bae6a6c2ee4ef5d8d1db05fd098b19b608046c9334b58d24d",
+   "note": "opus-mt-en-hi draft MT at the pinned revision",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Helsinki-NLP--opus-mt-en-hi/snapshots/75d7f7c9232b2891c7d65fe4ef635616c72be867/target.spm",
+   "bytes": 1067935,
+   "sha256": "f5529d3a72f8c1d5f7e357f1b6fd30e3cf58f6e1ba0401db135a118ac92f4a76",
+   "note": "opus-mt-en-hi draft MT at the pinned revision",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Helsinki-NLP--opus-mt-en-hi/snapshots/75d7f7c9232b2891c7d65fe4ef635616c72be867/tokenizer_config.json",
+   "bytes": 44,
+   "sha256": "4014e88de4dd56ca55fc10c0a82b74f04e8658369a390fe5d93e8ade16fa6a8a",
+   "note": "opus-mt-en-hi draft MT at the pinned revision",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--Helsinki-NLP--opus-mt-en-hi/snapshots/75d7f7c9232b2891c7d65fe4ef635616c72be867/vocab.json",
+   "bytes": 2097836,
+   "sha256": "4126cbe0acd618982d6fe0c4f7866b6545617b0dfe0ebdd17b8a2dcd4d9a3a40",
+   "note": "opus-mt-en-hi draft MT at the pinned revision",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--facebook--nllb-200-distilled-600M/snapshots/f8d333a098d19b4fd9a8b18f94170487ad3f821d/config.json",
+   "bytes": 846,
+   "sha256": "f9b4081d3d108e9d06532ea8d92b932c04ed3a15ff2f87e6982f8e14db51fbc5",
+   "note": "NLLB tokenizer only (weights are the CT2 directory below)",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--facebook--nllb-200-distilled-600M/snapshots/f8d333a098d19b4fd9a8b18f94170487ad3f821d/generation_config.json",
+   "bytes": 189,
+   "sha256": "0bb604cdb8392649176935a447ce994128f170a6908c135a17d0e3dfb8113cb2",
+   "note": "NLLB tokenizer only (weights are the CT2 directory below)",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--facebook--nllb-200-distilled-600M/snapshots/f8d333a098d19b4fd9a8b18f94170487ad3f821d/sentencepiece.bpe.model",
+   "bytes": 4852054,
+   "sha256": "14bb8dfb35c0ffdea7bc01e56cea38b9e3d5efcdcb9c251d6b40538e1aab555a",
+   "note": "NLLB tokenizer only (weights are the CT2 directory below)",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--facebook--nllb-200-distilled-600M/snapshots/f8d333a098d19b4fd9a8b18f94170487ad3f821d/special_tokens_map.json",
+   "bytes": 3548,
+   "sha256": "992bd4ed610d644d6823081937bcc91bb8878dd556cea4ae5327f2480361330e",
+   "note": "NLLB tokenizer only (weights are the CT2 directory below)",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--facebook--nllb-200-distilled-600M/snapshots/f8d333a098d19b4fd9a8b18f94170487ad3f821d/tokenizer.json",
+   "bytes": 17331176,
+   "sha256": "e316b82de11d0f951f370943b3c438311629547285129b0b81dadabd01bca665",
+   "note": "NLLB tokenizer only (weights are the CT2 directory below)",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/huggingface/hub/models--facebook--nllb-200-distilled-600M/snapshots/f8d333a098d19b4fd9a8b18f94170487ad3f821d/tokenizer_config.json",
+   "bytes": 564,
+   "sha256": "d1aa8c3697d3e35674f97b5b7e9c99d22b010f528e80140257d97316be90d044",
+   "note": "NLLB tokenizer only (weights are the CT2 directory below)",
+   "source": "user Hugging Face cache, pinned revision"
+  },
+  {
+   "dest_path": "models/nllb-200-distilled-600M-ct2-int8/config.json",
+   "bytes": 233,
+   "sha256": "72901fbd8abd89fb5cf4a388f26fc681f5c4c58a1e1a88b30b879f107270e7ee",
+   "note": "NLLB-200 distilled 600M, CTranslate2 int8 (final MT)",
+   "source": "research repository product_outputs/models (local conversion)"
+  },
+  {
+   "dest_path": "models/nllb-200-distilled-600M-ct2-int8/model.bin",
+   "bytes": 622596105,
+   "sha256": "01a1afe0f8ee492e0a1385c1a2984e42cf00558efc7fa3535279b949b9c9ae29",
+   "note": "NLLB-200 distilled 600M, CTranslate2 int8 (final MT)",
+   "source": "research repository product_outputs/models (local conversion)"
+  },
+  {
+   "dest_path": "models/nllb-200-distilled-600M-ct2-int8/sentencepiece.bpe.model",
+   "bytes": 4852054,
+   "sha256": "14bb8dfb35c0ffdea7bc01e56cea38b9e3d5efcdcb9c251d6b40538e1aab555a",
+   "note": "NLLB-200 distilled 600M, CTranslate2 int8 (final MT)",
+   "source": "research repository product_outputs/models (local conversion)"
+  },
+  {
+   "dest_path": "models/nllb-200-distilled-600M-ct2-int8/shared_vocabulary.json",
+   "bytes": 6177383,
+   "sha256": "768aa4170693765cb4c62fc485ea4fd954cd3e5a44bc645d11d83f41f2393776",
+   "note": "NLLB-200 distilled 600M, CTranslate2 int8 (final MT)",
+   "source": "research repository product_outputs/models (local conversion)"
+  },
+  {
+   "dest_path": "models/nllb-200-distilled-600M-ct2-int8/special_tokens_map.json",
+   "bytes": 3548,
+   "sha256": "992bd4ed610d644d6823081937bcc91bb8878dd556cea4ae5327f2480361330e",
+   "note": "NLLB-200 distilled 600M, CTranslate2 int8 (final MT)",
+   "source": "research repository product_outputs/models (local conversion)"
+  },
+  {
+   "dest_path": "models/nllb-200-distilled-600M-ct2-int8/tokenizer.json",
+   "bytes": 17331176,
+   "sha256": "e316b82de11d0f951f370943b3c438311629547285129b0b81dadabd01bca665",
+   "note": "NLLB-200 distilled 600M, CTranslate2 int8 (final MT)",
+   "source": "research repository product_outputs/models (local conversion)"
+  },
+  {
+   "dest_path": "models/nllb-200-distilled-600M-ct2-int8/tokenizer_config.json",
+   "bytes": 564,
+   "sha256": "d1aa8c3697d3e35674f97b5b7e9c99d22b010f528e80140257d97316be90d044",
+   "note": "NLLB-200 distilled 600M, CTranslate2 int8 (final MT)",
+   "source": "research repository product_outputs/models (local conversion)"
+  }
+ ]
+}

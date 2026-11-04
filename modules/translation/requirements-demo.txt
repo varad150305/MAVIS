@@ -1,0 +1,24 @@
+# MAVIS translation module - runtime dependencies (Python 3.10, Windows x64, CPU only).
+# Versions are those of the environment the product was developed and accepted on.
+#
+# torch and torchaudio are NOT listed here: setup_demo.ps1 installs the CPU
+# builds first from the PyTorch CPU index (see requirements-torch-cpu.txt),
+# so pip never pulls a CUDA build.
+#
+# Exact, fully resolved versions of every package: requirements-demo.lock.txt
+
+numpy==2.2.6
+PyYAML==6.0.2
+sounddevice==0.5.1           # microphone capture (PortAudio is bundled in the wheel)
+silero-vad==6.2.1            # VAD; the model weights ship inside this package
+faster-whisper==1.1.1        # Whisper tiny ASR (CTranslate2 backend)
+ctranslate2==4.8.1           # also runs the NLLB-200 int8 final translator
+onnxruntime==1.23.2          # faster-whisper dependency
+av==17.1.0                   # faster-whisper dependency
+transformers==4.52.4         # opus-mt-en-hi draft translator + NLLB tokenizer
+tokenizers==0.21.4
+huggingface-hub==0.36.2
+sentencepiece==0.2.0         # Marian (opus-mt) and NLLB tokenizers
+sacremoses==0.2.0            # Marian tokenizer punctuation normalizer (same output as the accepted build)
+safetensors==0.5.3
+opencv-python==4.11.0.86     # desktop UI: speaker camera as the transcript background (optional at run time)

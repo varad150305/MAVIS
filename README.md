@@ -1,6 +1,16 @@
 # MAVIS
 
-One app with three modes, built from three existing projects:
+**Gesture recognition is the controller.** Open **Gesture control** (`/control/`): 👍 thumbs up = ready, then
+☝️ 1 finger = OCR + LLM (Varad), ✌️ 2 fingers = Live Translation (Yogita), 🤟 3 fingers = Drishti (Harsh).
+🖐 open palm turns the running module off. The module opens on the same screen with a small gesture box in the corner.
+Documents are read only by the OCR + LLM module and speech is translated only by Yogita's module: Drishti's own
+Read Text and Translate modes are hidden (Drishti's files are unchanged).
+
+Live Translation (`modules/translation`, English speech -> Hindi) runs in its own Python 3.10 environment because its
+packages clash with the rest: run **`setup_translation.bat`** once (needs Python 3.10 and internet once for ~1 GB of
+models). It uses this computer's microphone.
+
+One app, built from these projects:
 
 | Mode | Project | What it does | Where |
 |---|---|---|---|

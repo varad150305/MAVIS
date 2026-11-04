@@ -1,0 +1,2 @@
+# Smoke / product tests (optional; installed by setup_demo.ps1 unless -NoTests)
+pytest==9.1.1

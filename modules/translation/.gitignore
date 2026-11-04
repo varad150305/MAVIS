@@ -1,0 +1,17 @@
+# environment
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# runtime output (sessions, saved microphone audio, generated demo audio)
+runtime_data/*
+!runtime_data/sessions/
+runtime_data/sessions/*
+!runtime_data/sessions/.gitkeep
+
+# model assets are large binaries; keep them out of git (distribute the folder, or use setup_models.ps1 -Download)
+models/
+
+# packaging audit (kept with the handoff folder, not needed in a code repository)
+_handoff_audit/
